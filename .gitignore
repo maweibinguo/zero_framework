@@ -1,0 +1,7 @@
+/composer.json
+/attach/*
+*.swp
+product/*
+develop/*
+logs/*
+*.htaccess
