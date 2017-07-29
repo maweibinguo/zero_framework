@@ -2,6 +2,7 @@
 namespace core\base;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;
+use Phalcon\Loader;
 use Noodlehaus\Config as NoodConfig;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -18,7 +19,7 @@ class BaseApp extends Components
 	/**
 	 * 服务管理容器
 	 */
-	protected $di;
+    protected $di;
 
 	/**
 	 * 注册配置服务，同时绑定core服务
@@ -28,20 +29,33 @@ class BaseApp extends Components
 		$this->di = new FactoryDefault();
 		$this->di->setShared('config', function() use ($config_path) {
 			return new NoodConfig($config_path);
-		});
-	}
+        });
+        $this->_bindService();
+		$this->_registerAutoloadNamespace();
+    }
 
-	/**
-	 * 获取服务
-	 */
-	public function get($service_name)
-	{
-		if( is_object( $service = $this->di->get($service_name) ) ) {
-			return $service;
-		} else {
-			throw new \Exception("没有找到对应的服务");	
-		}
-	}
+    /**
+     * 绑定服务
+     */
+    private function _bindService()
+    {
+        //获取当前对象的方法
+        $methods_list = get_class_methods($this);
+
+        //开始调用绑定服务的方法
+        foreach ($methods_list as $method) {
+            if ((strlen($method) > 10) && (strpos($method, '_initShared') === 0)) {
+                $this->$method();
+                continue;
+            }
+            
+            if ((strlen($method) > 4) && (strpos($method, '_init') === 0)) {
+                $this->$method();
+                continue;
+            }
+        }
+    }
+
 
 	/**
 	 * 获取服务容器
@@ -55,23 +69,18 @@ class BaseApp extends Components
 		}
 	}
 
-	/**
-	 * 初始化单例db服务
-	 */
-	/*private function _initSharedDb()
-	{
-		$this->di->setShared('db', function(){
-			$config_service = $this->get('config');
-			$db_config_list = $config_service->get('database');
-			$list = [
-                "host"     => $db_config_list['host'],
-                "username" => $db_config_list['username'],
-                "password" => $db_config_list['password'],
-                "dbname"   => $db_config_list['dbname']
-			];
-			return new PdoMysql($list);
-		});
-	}*/
+    /**
+     * 获取cgi接口
+     */
+    public function isCli()
+    {
+        $is_cli = false;
+        $sapi_name = strtolower(PHP_SAPI_NAME());
+        if(substr($sapi_name, 0, 3 ) == 'cli') {
+            $is_cli = true;
+        }
+        return $is_cli;
+    }
 
 	/**
 	 * 初始化log日志服务
@@ -82,8 +91,9 @@ class BaseApp extends Components
 		$this->di->set('log', function(){
 			$default_channel_name = $this->get('config')->get('default_channel_name');
 			$logger = new Logger($default_channel_name);
-			$log_name = "{$default_channel_name}-" . date('Y-m-d') . ".log";
-			$log_path = CLI_APP_ROOT . 'logs' . DIRECTORY_SEPARATOR . $log_name;
+			$log_name = "common-" . date('Y-m-d') . ".log";
+            $save_dir = APP_ROOT . static::getServiceName() . DS . 'runtime' . DS . 'logs' . DS;
+			$log_path = $save_dir . $log_name;
 			$logger->pushHandler(new StreamHandler($log_path));
 			return $logger;
 		});
@@ -181,4 +191,22 @@ class BaseApp extends Components
     {
         $this->_initDBWithProfiler($is_reconnected = true);
     }
+
+	/**
+	 * 注册哪些命名空间下的文件自动加载
+	 */
+	private function _registerAutoloadNamespace()
+    {
+        $service_name = static::getServiceName();
+        $autoload_namespace_list = [
+                                        '\app\\'.$service_name . '\console\\' => APP_ROOT . $service_name . DS . 'console' . DS,
+                                        '\app\\'.$service_name . '\controllers\\' => APP_ROOT . $service_name . DS . 'controllers'. DS,
+                                        '\app\\'.$service_name . '\forms\\' => APP_ROOT . $service_name . DS . 'forms' . DS,
+                                        '\app\\'.$service_name . '\models\\' => APP_ROOT . $service_name . DS . 'models' . DS,
+                                        '\app\\'.$service_name . '\service\\' => APP_ROOT . $service_name . DS . 'service' . DS,
+                                    ];
+        $loader = new Loader();		
+        $loader->registerNamespaces($autoload_namespace_list);
+        $loader->register();
+	}
 }

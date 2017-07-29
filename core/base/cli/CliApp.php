@@ -10,20 +10,6 @@ use core\base\BaseApp;
 class CliApp extends BaseApp
 {
     /**
-     * 服务名称
-     */
-    private $_service_name = '';
-
-    /**
-     * 初始化相关变量
-     */
-    public function __construct($service_name, $config_path_list)
-    {
-        $this->_service_name = $service_name;   
-        parent::__construct($config_path_list);
-    }
-
-    /**
      * 返回当前应用的服务名称
      */
     public function getServiceName()

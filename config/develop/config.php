@@ -33,5 +33,7 @@ return [
                                 'keepalive' => false,
                                 'heartbeat' => 0,
                                 'log_path' => '/tmp/runtime/logs/mqlog/', 
-                              ]
+                            ],
+    //default_namespace
+    'default_namespace'   => '\app\\',
 ];

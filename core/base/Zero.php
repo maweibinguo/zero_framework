@@ -4,7 +4,7 @@ namespace core\base;
 /**
  * zero框架
  */
-class Zero
+class Zero extends Components
 {
     /**
      * 框架的应用
@@ -18,14 +18,16 @@ class Zero
     {
         /* 初始化返回结果 */
         $config_path_list = [];
+        $service_name = static::getServiceName();
+        $service_app_root = APP_ROOT . $service_name . DS;
 
         /* 合并配置文件 */
-        if( FRAME_MODE == 'develop' ) {
-            $service_config = SERVICE_APP_ROOT . 'config' . DIRECTORY_SEPARATOR . 'develop' . DIRECTORY_SEPARATOR;
-            $common_config = CONFIG_ROOT . 'develop' . DIRECTORY_SEPARATOR;
+        if( IS_DEBUG ) {
+            $service_config = $service_app_root . 'config' . DS . 'develop' . DS;
+            $common_config = CONFIG_ROOT . 'develop' . DS;
         } else {
-            $service_config = SERVICE_APP_ROOT . 'config' . DIRECTORY_SEPARATOR . 'product' . DIRECTORY_SEPARATOR;
-            $common_config = CONFIG_ROOT . 'product' . DIRECTORY_SEPARATOR;
+            $service_config = $service_app_root. 'config' . DS . 'product' . DS;
+            $common_config = CONFIG_ROOT . 'product' . DS;
         }
 
         /* 返回最终结果 */
@@ -33,6 +35,14 @@ class Zero
             $common_config, $service_config
         ];
         return $config_path_list;
+    }
+
+    /**
+     * 获取zero框架的版本号
+     */
+    public function getVersion()
+    {
+        return '1.0';
     }
 
 }
