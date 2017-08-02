@@ -199,11 +199,11 @@ class BaseApp extends Components
     {
         $service_name = static::getServiceName();
         $autoload_namespace_list = [
-                                        '\app\\'.$service_name . '\console\\' => APP_ROOT . $service_name . DS . 'console' . DS,
-                                        '\app\\'.$service_name . '\controllers\\' => APP_ROOT . $service_name . DS . 'controllers'. DS,
-                                        '\app\\'.$service_name . '\forms\\' => APP_ROOT . $service_name . DS . 'forms' . DS,
-                                        '\app\\'.$service_name . '\models\\' => APP_ROOT . $service_name . DS . 'models' . DS,
-                                        '\app\\'.$service_name . '\service\\' => APP_ROOT . $service_name . DS . 'service' . DS,
+                                        'app\\'.$service_name . '\\console' => APP_ROOT . $service_name . DS . 'console' . DS,
+                                        'app\\'.$service_name . '\\controllers' => APP_ROOT . $service_name . DS . 'controllers'. DS,
+                                        'app\\'.$service_name . '\\forms' => APP_ROOT . $service_name . DS . 'forms' . DS,
+                                        'app\\'.$service_name . '\\models' => APP_ROOT . $service_name . DS . 'models' . DS,
+                                        'app\\'.$service_name . '\\service' => APP_ROOT . $service_name . DS . 'service' . DS,
                                     ];
         $loader = new Loader();		
         $loader->registerNamespaces($autoload_namespace_list);

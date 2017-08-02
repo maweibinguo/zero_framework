@@ -11,10 +11,6 @@ class ComposerStaticInitf754879a85754b36fa82e46913e83f2f
         array (
             'core\\' => 5,
         ),
-        'a' => 
-        array (
-            'app\\job\\' => 8,
-        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -34,10 +30,6 @@ class ComposerStaticInitf754879a85754b36fa82e46913e83f2f
         'core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/core',
-        ),
-        'app\\job\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/app/job',
         ),
         'Psr\\Log\\' => 
         array (

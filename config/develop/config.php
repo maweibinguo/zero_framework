@@ -35,5 +35,5 @@ return [
                                 'log_path' => '/tmp/runtime/logs/mqlog/', 
                             ],
     //default_namespace
-    'default_namespace'   => '\app\\',
+    'default_namespace'   => '\\app\\',
 ];

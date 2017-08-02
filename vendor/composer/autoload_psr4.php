@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'core\\' => array($baseDir . '/core'),
-    'app\\job\\' => array($baseDir . '/app/job'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'PhpAmqpLib\\' => array($vendorDir . '/php-amqplib/php-amqplib/PhpAmqpLib'),
     'Noodlehaus\\' => array($vendorDir . '/hassankhan/config/src'),
