@@ -1,7 +1,7 @@
 <?php
-namespace Core;
+namespace core\base;
 
-trait SaveRemoteFile 
+class Attach
 {
 
     /**
@@ -35,7 +35,6 @@ trait SaveRemoteFile
     {
         //root path
         $rootPath = strtolower($this->getRootPath());
-        
         if (!is_dir($rootPath)){
             mkdir($rootPath, 0755);
         }
@@ -60,7 +59,7 @@ trait SaveRemoteFile
             mkdir($filePath, 0755);
         }
         //把$rootPath中的内容替换成 ‘’
-        return str_replace($rootPath, '', $filePath) . '/';
+        return $filePath;
     }
 
     /**
