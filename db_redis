@@ -1,0 +1,20 @@
+article.count [string]
+
+article.list  [zset]
+
+article.detail:{$article_id} [hash]
+
+article.tags    [set]
+
+#文章对应的标签
+article:{$article_id}:tags  [set]
+
+#标签中包含哪些文章
+tag:{$tagname}  [set]
+
+#如何实现评论的砌墙
+article.comment.count  [string]
+
+article.comment.list   [list]
+
+article.comment:{$comment_id} [hash]

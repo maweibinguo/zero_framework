@@ -28,7 +28,7 @@ class BaseController extends Controller
     /**
      * 禁用模板渲染的级别
      */
-    public $disable_level = [   View::LEVEL_ACTION_VIEW => true   ];
+    public $disable_level = [];
 
     /**
      * 公共的js
@@ -130,4 +130,8 @@ class BaseController extends Controller
             }
         }
     }
+
+    /**
+     * 
+     */
 }

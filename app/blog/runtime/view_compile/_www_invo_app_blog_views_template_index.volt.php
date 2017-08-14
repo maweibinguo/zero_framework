@@ -5,7 +5,9 @@
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>insisting博客</title>
+<title><?php echo $title;?></title>
+<meta name="keywords" content="<?php echo $keywords;?>"/>
+<meta name="description" content="<?php echo $description; ?>">
 <?php $this->assets->outputCss('header'); ?>
 <!--[if gte IE 9]>
 <script src='js/html5shiv.min.js'></script>
@@ -60,9 +62,7 @@
   </nav>
 </header>
 <section class="container">
-  <div class="content-wrap">
-        <?= $this->getContent() ?>
-  </div>
+    <?= $this->getContent() ?>
 </section>
 <footer class="footer">
   <div class="container">

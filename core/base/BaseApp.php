@@ -10,6 +10,7 @@ use core\base\Components;
 use core\base\Router;
 use core\curl\CurlRequest;
 use core\base\mq\MqFactory;
+use core\base\Response;
 
 /**
  * 注册框架需要的核心服务组件
@@ -201,12 +202,23 @@ class BaseApp extends Components
         $autoload_namespace_list = [
                                         'app\\'.$service_name . '\\console' => APP_ROOT . $service_name . DS . 'console' . DS,
                                         'app\\'.$service_name . '\\controllers' => APP_ROOT . $service_name . DS . 'controllers'. DS,
-                                        'app\\'.$service_name . '\\forms' => APP_ROOT . $service_name . DS . 'forms' . DS,
+                                        'app\\'.$service_name . '\\validator' => APP_ROOT . $service_name . DS . 'validator' . DS,
                                         'app\\'.$service_name . '\\models' => APP_ROOT . $service_name . DS . 'models' . DS,
                                         'app\\'.$service_name . '\\service' => APP_ROOT . $service_name . DS . 'service' . DS,
                                     ];
         $loader = new Loader();		
         $loader->registerNamespaces($autoload_namespace_list);
         $loader->register();
-	}
+    }
+
+    /**
+     * 设置响应服务
+     */
+    protected function _initResponse()
+    {
+        $this->di->set('response', function(){
+            $response = new Response();
+            return $response;            
+        });
+    }
 }
