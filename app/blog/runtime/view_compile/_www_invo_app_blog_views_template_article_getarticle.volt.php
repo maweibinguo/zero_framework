@@ -10,9 +10,10 @@
   </header>
 
   <!-- 文章内容 -->
-  <article class="article-content">
-    <?php var_dump($article_detail);die();?>
-    <?php echo $article_detail['htmlcontent']; ?>
+  <div id='hidden_article_content' style="display:none;">
+    <?php echo $article_detail['mdcontent']; ?>
+  </div>
+  <article class="article-content" id="article_content">
   </article>
 
   <!-- 为文章标签 -->  
@@ -62,3 +63,6 @@
   </div>
 </div>
 </div>
+<?php
+    $this->partial("share/sidebar");
+?>

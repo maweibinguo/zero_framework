@@ -9,10 +9,11 @@
 <meta name="keywords" content="<?php echo $keywords;?>"/>
 <meta name="description" content="<?php echo $description; ?>">
 <?php $this->assets->outputCss('header'); ?>
+<link rel="apple-touch-icon-precomposed" href="/images/icon/icon.png">
 <!--[if gte IE 9]>
-<script src='js/html5shiv.min.js'></script>
-<script src='js/respond.min.js'></script>
-<script src='js/selectivizr-min.js'></script>
+<script src='/js/html5shiv.min.js'></script>
+<script src='/js/respond.min.js'></script>
+<script src='/js/selectivizr-min.js'></script>
 <![endif]-->
 <!--[if lt IE 9]>
   <script>window.location.href='upgrade-browser.html';</script>
@@ -39,11 +40,11 @@
         <a data-toggle="modal" data-target="#loginModal" class="login" rel="nofollow">Hi,请登录</a>&nbsp;&nbsp;<a href="javascript:;" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a> </div>
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar" aria-expanded="false"> <span class="sr-only"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-        <h1 class="logo hvr-bounce-in"><a href="" title=""><img src="/images/logo.png" alt=""></a></h1>
+        <h1 class="logo hvr-bounce-in"><a href="/index/index" title=""><img src="/images/logo.png" alt=""></a></h1>
       </div>
       <div class="collapse navbar-collapse" id="header-navbar">
         <ul class="nav navbar-nav navbar-right">
-          <li class="hidden-index active"><a data-cont="insisting首页" href="index.html">insisting首页</a></li>
+          <li class="hidden-index active"><a data-cont="insisting首页" href="/index/index">insisting首页</a></li>
           <li><a href="category.html">前端技术</a></li>
           <li><a href="category.html">后端程序</a></li>
           <li><a href="category.html">管理系统</a></li>

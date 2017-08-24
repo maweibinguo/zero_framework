@@ -1,6 +1,8 @@
 <?php
 namespace app\blog\controllers;
 
+use app\blog\service\ArticleService;
+
 class IndexController extends BaseController
 {
     /**
@@ -8,5 +10,7 @@ class IndexController extends BaseController
      */
     public function indexAction()
     {
+       $article_service = new ArticleService();
+       $article_service->getArticleList([]);
     }
 }

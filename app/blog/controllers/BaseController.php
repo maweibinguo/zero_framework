@@ -132,6 +132,28 @@ class BaseController extends Controller
     }
 
     /**
-     * 
+     * ajax成功响应
      */
+    public function responseSuccess($message = '', $data = [])
+    {
+        $return_data = [
+                            'status'  => 'success',
+                            'message' => $message,
+                            'data'    => $data
+                        ];
+        exit(json_encode($return_data));
+    }
+
+    /**
+     * ajax失败相应
+     */
+    public function responseFailed($message = '', $data = [])
+    {
+        $return_data = [
+                            'status'  => 'failed',
+                            'message' => $message,
+                            'data'    => $data
+                        ];
+        exit(json_encode($return_data));
+    }
 }

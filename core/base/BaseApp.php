@@ -221,4 +221,13 @@ class BaseApp extends Components
             return $response;            
         });
     }
+
+    protected function _initSession()
+    {
+        $this->di->set('session', function(){
+            $session = new \Phalcon\Session\Adapter\Files();
+            $session->start();
+            return $session;
+        }); 
+    }
 }

@@ -8,9 +8,21 @@ $('.submit').on('click',function(){
                         var tag = $.trim($('#tag').val());
                         var mdcontent = $.trim(testEditor.getMarkdown());
                         var htmlcontent = $.trim(testEditor.getHTML()); 
+                        if(title == '') {
+                            layer.alert('请填写文章标题');
+                            return false;
+                        }
+                        if(tag == '') {
+                            layer.alert('请填写文章标题');
+                            return false;
+                        }
+                        if(mdcontent == '' || htmlcontent == '') {
+                            layer.alert('请编写文章内容');
+                            return false;
+                        }
                         $.ajax({
-                            //'type':'json',
-                            'url':'/article/addarticle',
+                            'type':'json',
+                            'url':$('.form-horizontal').attr('action'),
                             'type':'post',
                             'data':{
                                         'title':title,
@@ -30,4 +42,27 @@ $('.submit').on('click',function(){
                         });
                     }
                  );    
-})
+});
+
+var testEditor;
+
+$(function() {
+    testEditor = editormd("test-editormd", {
+        width   : "100%",
+        height  : "750px",
+        syncScrolling : "single",
+        path    : "/js/editormd/lib/",
+        imageUpload : true,
+        imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageUploadURL : "/upload/index",
+        saveHTMLToTextarea:true,
+        //tex
+        text:true,
+        //流程图
+        flowChart : true,
+        //时序图
+        sequenceDiagram : true,
+        editorTheme : editormd.editorThemes['ambiance'],
+        
+    });
+});
