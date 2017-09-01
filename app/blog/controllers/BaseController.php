@@ -39,7 +39,9 @@ class BaseController extends Controller
                             'js/jquery.lazyload.min.js',
                             'js/bootstrap.min.js',
                             'js/jquery.ias.js',
-                            'js/scripts.js'
+                            'js/scripts.js',
+                            'js/layer/layer/layer.js',
+                            'js/validate/user.js'
                         ];
 
     /**
@@ -63,6 +65,24 @@ class BaseController extends Controller
     public $page_css = [];
 
     /**
+     * 在路由前执行的方法
+     */
+    public function beforeExecuteRoute($dispatcher)
+    {
+        //校验登录
+        $controller_name = $dispatcher->getControllerName();
+        $action_name = $dispatcher->getActionName();
+        $access_controll_list = $this->config->get('needed_login');
+        if(isset($access_controll_list[$controller_name]) && 
+                                                            !empty($access_controll_list[$controller_name][$action_name])) {
+            $login_data = $this->isLogin();
+            if($login_data === false) {
+                return $this->response->redirect('/index/index');
+            }
+        }
+    }
+
+    /**
      * 在路由后执行的方法
      */
     public function afterExecuteRoute()
@@ -80,6 +100,13 @@ class BaseController extends Controller
         $this->view->setVar('keywords', $this->keywords);
         $this->view->setVar('description', $this->description);
         $this->view->setVar('title', $this->title);
+        $user_data = $this->isLogin();
+        if(!empty($user_data)) {
+            $this->view->setVar('user_data', $user_data);
+            $this->view->setVar('is_login', true);
+        } else {
+            $this->view->setVar('is_login', false);
+        }
         $this->view->disableLevel($this->disable_level);
     }
 
@@ -155,5 +182,20 @@ class BaseController extends Controller
                             'data'    => $data
                         ];
         exit(json_encode($return_data));
+    }
+
+    /**
+     * 校验是否登录
+     */
+    public function isLogin()
+    {
+        $result = false; 
+        $login_session_name = $this->config->get('login_session_name');
+        $login_session_data = $this->session->get($login_session_name);
+        if(empty($login_session_data)) {
+            return $result;
+        }
+        $result = (array)$this->jwt->decrypt($login_session_data);
+        return $result;
     }
 }

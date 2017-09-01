@@ -116,25 +116,28 @@ document.body.onselectstart = document.body.ondrag = function () {
 //启用工具提示
 $('[data-toggle="tooltip"]').tooltip();
  
- 
 //无限滚动反翻页
-jQuery.ias({
-	history: false,
+var ias = jQuery.ias({
 	container : '.content',
 	item: '.excerpt',
 	pagination: '.pagination',
 	next: '.next-page a',
 	trigger: '查看更多',
-	loader: '<div class="pagination-loading"><img src="/Home/images/loading.gif" /></div>',
-	triggerPageThreshold: 5,
+	loader: '<div class="pagination-loading"><img src="/images/loading.gif" /></div>',
+    triggerPageThreshold:3,
 	onRenderComplete: function() {
 		$('.excerpt .thumb').lazyload({
-			placeholder: '/Home/images/occupying.png',
+			placeholder: '/images/occupying.png',
 			threshold: 400
 		});
 		$('.excerpt img').attr('draggable','false');
 		$('.excerpt a').attr('draggable','false');
-	}
+	},
+    onPageChange:function(pageNum, pageUrl, scrollOffset) {
+        if(pageNum > $('#total_page_number').val()) {
+            return false;
+        }
+    }
 });
  
 //鼠标滚动超出侧边栏高度绝对定位
@@ -198,6 +201,7 @@ $(function(){
 		return false;
 	});
 });
+
 //对文章内容进行替换
 function replace_em(str){
 	str = str.replace(/\</g,'&lt;');
@@ -209,8 +213,8 @@ function replace_em(str){
 //Console
 try {
     if (window.console && window.console.log) {
-        console.log("\n欢迎访问异清轩博客！\n\n在本站可以看到前端技术，后端程序，网站内容管理系统等文章；\n\n还有我的程序人生！！！\n");
-        console.log("\n请记住我们的网址：%c www.ylsat.com", "color:red");
+        console.log("\n欢迎访问insisting博客！\n\n在本站可以看到前端技术，后端程序，网站内容管理系统等文章；\n\n还有我的程序人生！！！\n");
+        console.log("\n请记住我们的网址：www.insisting.top", "color:red");
         console.log("\nPOWERED BY WY ALL RIGHTS RESERVED");
     }
 } catch (e) {};

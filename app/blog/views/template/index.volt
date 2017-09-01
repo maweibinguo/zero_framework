@@ -37,7 +37,17 @@
             </ul>
           </li>
         </ul>
-        <a data-toggle="modal" data-target="#loginModal" class="login" rel="nofollow">Hi,请登录</a>&nbsp;&nbsp;<a href="javascript:;" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a> </div>
+
+        <a data-toggle="modal" data-target="#loginModal" class="login" rel="nofollow">
+            <?php if($is_login) {?>
+                    Hi,<span style="color:#3399CC"><?php echo $user_data['user_name'];?></span>
+                    &nbsp;&nbsp;
+                    <a href="/acc/logout"/> 退出登录</a>
+            <?php }else{ ?>
+                    Hi,请登录
+                    </a>&nbsp;&nbsp;<a href="javascript:;" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a>
+            <?php } ?>
+      </div>
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar" aria-expanded="false"> <span class="sr-only"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
         <h1 class="logo hvr-bounce-in"><a href="/index/index" title=""><img src="/images/logo.png" alt=""></a></h1>
@@ -45,11 +55,8 @@
       <div class="collapse navbar-collapse" id="header-navbar">
         <ul class="nav navbar-nav navbar-right">
           <li class="hidden-index active"><a data-cont="insisting首页" href="/index/index">insisting首页</a></li>
-          <li><a href="category.html">前端技术</a></li>
-          <li><a href="category.html">后端程序</a></li>
-          <li><a href="category.html">管理系统</a></li>
-          <li><a href="category.html">授人以渔</a></li>
-          <li><a href="category.html">程序人生</a></li>
+          <li><a href="category.html">技术那点事</a></li>
+          <li><a href="category.html">虾扯淡</a></li>
         </ul>
         <form class="navbar-form visible-xs" action="/Search" method="post">
           <div class="input-group">
@@ -75,7 +82,7 @@
 <div class="modal fade user-select" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form action="/Admin/Index/login" method="post">
+      <form action="/acc/login" method="post" id='login_form'>
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="loginModalLabel">登录</h4>
@@ -83,11 +90,11 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="loginModalUserNmae">用户名</label>
-            <input type="text" class="form-control" id="loginModalUserNmae" placeholder="请输入用户名" autofocus maxlength="15" autocomplete="off" required>
+            <input type="text" class="form-control" id="user_name" placeholder="请输入用户名" autofocus maxlength="15" name="user_name" autocomplete="off" required>
           </div>
           <div class="form-group">
             <label for="loginModalUserPwd">密码</label>
-            <input type="password" class="form-control" id="loginModalUserPwd" placeholder="请输入密码" maxlength="18" autocomplete="off" required>
+            <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" maxlength="18" autocomplete="off" required>
           </div>
         </div>
         <div class="modal-footer">

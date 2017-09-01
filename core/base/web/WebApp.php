@@ -24,9 +24,9 @@ class WebApp extends BaseApp
             $application = new Application($this->di);
             echo $application->handle()->getContent();
         } catch(\Exception $e) {
-            echo "\n=========================================\n";
-            echo $e->getMessage();	
-            echo "\n=========================================\n";
+            $error_message = $e->getMessage();	
+            $this->flashSession->error($error_message); 
+            return header('location:/error/notFound');
         }		
     }
 

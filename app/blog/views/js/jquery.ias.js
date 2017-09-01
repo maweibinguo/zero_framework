@@ -105,7 +105,7 @@
 			var e = w();
 			e.remove()
 		}
-		var n = e.extend({}, e.ias.defaults, t),
+		var n = e.extend({}, e.ias.defaults, t), // 用户自定的js级别要高于默认的
 			r = new e.ias.util,
 			i = new e.ias.paging(n.scrollContainer),
 			s = n.history ? new e.ias.history : !1,

@@ -4,7 +4,17 @@
   <header class="article-header">
     <h1 class="article-title"><?php echo $article_detail['title'];?></h1>
     <div class="article-meta"> <span class="item article-meta-time">
-      <time class="time" data-toggle="tooltip" data-placement="bottom" title="时间：<?php echo date('Y-m-d H:i:s', $article_detail['add_time']) ?>"><i class="glyphicon glyphicon-time"></i> 2016-1-4 10:29:39</time>
+
+      <span class="glyphicon glyphicon-calendar"></span>
+      <?php echo date('Y-m-d H:i:s',$article_detail['add_time']);?></time>
+      &nbsp;&nbsp;
+      <span class="views"><i class="glyphicon glyphicon-eye-open"></i> 共120人浏览</span>
+      <?php if($is_login) :?>
+      &nbsp;&nbsp;
+      <a href='/article/edite?article_id=<?php echo $article_detail['article_id'];?>'/><span class="glyphicon glyphicon-edit">编辑</span></a>
+      &nbsp;&nbsp;
+       <a href="javascript:void(0)"  url="/article/delete?article_id=<?php echo $article_detail['article_id'];?>" id="delete_article"/><span class="glyphicon glyphicon-remove-circle"></span>删除</a>
+      <?php endif;?>
       </span> 
     </div>
   </header>
@@ -23,17 +33,18 @@
         <?php }?>
   </div>
 
-  <div class="title" id="comment">
+  <!--div class="title" id="comment">
     <h3>评论 <small>抢沙发</small></h3>
   </div>
-  <!--<div id="respond">
+  <div id="respond">
     <div class="comment-signarea">
       <h3 class="text-muted">评论前必须登录！</h3>
       <p> <a href="javascript:;" class="btn btn-primary login" rel="nofollow">立即登录</a> &nbsp; <a href="javascript:;" class="btn btn-default register" rel="nofollow">注册</a> </p>
       <h3 class="text-muted">当前文章禁止评论</h3>
     </div>
   </div>-->
-  <div id="respond">
+
+  <!--div id="respond">
     <form action="" method="post" id="comment-form">
       <div class="comment">
         <div class="comment-title"><img class="avatar" src="images/icon/icon.png" alt="" /></div>
@@ -47,8 +58,9 @@
         </div>
       </div>
     </form>
-  </div>
-  <div id="postcomments">
+  </div-->
+
+  <!--div id="postcomments">
     <ol class="commentlist">
       <li class="comment-content"><span class="comment-f">#1</span>
         <div class="comment-avatar"><img class="avatar" src="images/icon/icon.png" alt="" /></div>
@@ -58,9 +70,8 @@
         </div>
       </li>
     </ol>
-    
     <div class="quotes"><span class="disabled">首页</span><span class="disabled">上一页</span><a class="current">1</a><a href="">2</a><span class="disabled">下一页</span><span class="disabled">尾页</span></div>
-  </div>
+  </div-->
 </div>
 </div>
 <?php

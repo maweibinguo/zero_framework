@@ -222,6 +222,9 @@ class BaseApp extends Components
         });
     }
 
+    /**
+     * 设置session服务
+     */
     protected function _initSession()
     {
         $this->di->set('session', function(){
@@ -229,5 +232,16 @@ class BaseApp extends Components
             $session->start();
             return $session;
         }); 
+    }
+
+    /**
+     * 设置jwt服务
+     */
+    protected function _initJwt()
+    {
+        $this->di->set('jwt', function(){
+            $jwt = new \core\base\Jwt();
+            return $jwt;
+        });
     }
 }

@@ -33,12 +33,53 @@ class ArticleService extends Components
     }
 
     /**
+     * 修改文章
+     */
+    public function modifyArticle($article_detail)
+    {
+        //获取原有文章的内容
+        $old_article_detail = $this->redis->hGetAll($article_detail['article_id']);
+
+        //首先更新文章的标签
+        $article_tag_model = new ArticleTagModel();
+        $article_tag_model->editeArticleTag($article_detail, $old_article_detail);
+
+        //更新文章的内容
+        $article_model = new ArticleModel();
+        $article_model->editeArticle($article_detail, $old_article_detail);
+    }
+
+    /**
+     * 删除指定的文章
+     */
+    public function deleteTargetArticle($article_id)
+    {
+        //获取文章详情
+        $article_model = new ArticleModel();
+        $article_detail = $article_model->getArticleDetail($article_id);
+        if( empty($article_detail) ) {
+            throw new \Exception('并未查找到该文章');
+        }
+
+        //基于标签进行删除
+        $tag_list = explode(',', $article_detail['tag']);
+        $article_tag_model = new ArticleTagModel();
+        foreach($tag_list as $tag_name) {
+            $article_tag_model->deleteArticleFromTargetTag($article_id, $tag_name);
+        }
+
+        //删除该文章
+        $article_model->deleteArticleByArticleID($article_id);
+    }
+
+
+    /**
      * 获取文章详情
      */
-    public function getArticleDetail($key_name)
+    public function getArticleDetail($article_id)
     {
         $article_model = new ArticleModel();
-        $article_detail = $article_model->getArticleDetail($key_name);
+        $article_detail = $article_model->getArticleDetail($article_id);
         if(empty($article_detail)) {
             throw new \Exception('未能找到该文章，请尝试查看其它文章');   
         }
@@ -46,21 +87,34 @@ class ArticleService extends Components
     }
 
     /**
+     * 给予文章的键获取文章详情
+     */
+    public function getArticleDetailByKeyName($article_key_name)
+    {
+        $article_model = new ArticleModel();
+        $article_detail = $article_model::$redis->hGetAll($article_key_name);
+        return $article_detail;
+    }
+
+    /**
      * 获取文章列表
      */
-    public function getArticleList($condition)
+    public function getArticleList($condition = [])
     {
         /* 初始化返回结果 */
-        $article_list = [];
+        $return_data = [];
 
         if(!empty($condition['tag'])) {
-                                        
+            $article_tag_model = new ArticleTagModel();
+            $return_data = $article_tag_model->getArticleListByTag($condition);
+            return $return_data;
+        } else {
+            $article_list = $this->redis->zRevRange(ArticleModel::ARTICLE_COMMON_LIST, $condition['start'], $condition['end']);
+            $article_number = $this->redis->zCard(ArticleModel::ARTICLE_COMMON_LIST);
+            $return_data['article_number'] = $article_number;
+            $return_data['article_list'] = $article_list;
         }
-        $article_list = $this->redis->zRangeByScore(    ArticleModel::ARTICLE_COMMON_LIST,
-            0,
-            'inf+',
-            ['withscores' => true, 'limit' => [1, 10]]
-                                    );
-        var_dump($article_list);die();
+
+        return $return_data;
     }
 }

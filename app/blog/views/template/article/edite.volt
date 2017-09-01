@@ -7,7 +7,7 @@
 ?>
 <form class="form-horizontal" role="form" action="<?php echo $action_url;?>">
     <?php if(isset($article_detail) && !empty($article_detail)) {?>
-        <input type="hidden" name="article_id" value="<?php echo $article_detail['article_id'];?>"/>
+        <input type="hidden" name="article_id" id="article_id" value="<?php echo $article_detail['article_id'];?>"/>
     <?php } ?>
   <div class="form-group">
     <div class="col-sm-6">

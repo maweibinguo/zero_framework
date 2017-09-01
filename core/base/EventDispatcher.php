@@ -25,16 +25,12 @@ class EventDispatcher extends Components
      */
     public function beforeException(Event $event, Dispatcher $dispatcher, \Exception $exception)
     {
-        $dispatcher->forward([
-            'controller' => 'public',
-            'action'     => 'error'
-        ]); 
         $dispatcher->setParams([
             'code'    => $exception->getCode(),
             'message' => $exception->getMessage(),
             'file'    => $exception->getFile(),
             'line'    => $exception->getLine() 
         ]);
-        return true;
+        throw new \Exception('该页面已经不翼而飞了');
     }
 }

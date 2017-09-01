@@ -11,14 +11,14 @@ class BaseModel extends Model
     /**
      * redis服务
      */
-    protected $redis;
+    public static $redis;
 
     /**
      * 初始化相关属性
      */
     public function initialize()
     {
-        $this->redis = $this->di->get('redis'); 
+        static::$redis = $this->di->get('redis'); 
     }
 
     /**

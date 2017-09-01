@@ -38,5 +38,6 @@ try{
     \core\base\Zero::$app = new \core\base\web\WebApp($config_path_list);
     \core\base\Zero::$app->run();
 } catch(\Exception $e) {
+    $error_message = $e->getMessage();
     header('Location:' . $_SERVER['REQUEST_SCHEME'] . '//' . $SERVER['HTTP_HOST'] . '/error');
 }

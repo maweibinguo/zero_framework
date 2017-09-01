@@ -21,4 +21,25 @@ $(function() {
                 
             }
         });
+
+        $('#delete_article').on('click', function(){
+            var url = $(this).attr('url');
+            layer.confirm(  '是否要删除该文章', 
+                            {'icon':3, 'title':'提示'},
+                            function(index) {
+                                    $.ajax({
+                                        'dataType':'json',
+                                        'url':url,
+                                        'type':'get',
+                                        'success':function(data){
+                                             if(data.status == 'success') {
+                                                return window.location.href='/index/index';  
+                                             } else {
+                                                layer.alert(data.message, {'icon':6}); 
+                                             }
+                                         }
+                                    });
+                            }
+                         );
+        });
 });

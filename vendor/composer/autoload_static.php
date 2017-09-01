@@ -24,6 +24,10 @@ class ComposerStaticInitf754879a85754b36fa82e46913e83f2f
         array (
             'Monolog\\' => 8,
         ),
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -46,6 +50,10 @@ class ComposerStaticInitf754879a85754b36fa82e46913e83f2f
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
     );
 
