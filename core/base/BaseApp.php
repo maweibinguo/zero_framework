@@ -3,6 +3,7 @@ namespace core\base;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;
 use Phalcon\Loader;
+use Phalcon\Security;
 use Noodlehaus\Config as NoodConfig;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -11,6 +12,7 @@ use core\base\Router;
 use core\curl\CurlRequest;
 use core\base\mq\MqFactory;
 use core\base\Response;
+use core\base\Request;
 
 /**
  * 注册框架需要的核心服务组件
@@ -84,23 +86,6 @@ class BaseApp extends Components
     }
 
 	/**
-	 * 初始化log日志服务
-	 */
-	protected function _initLog()
-	{
-		//日志还有待完善，主要是对monolog还不是很了解
-		$this->di->set('log', function(){
-			$default_channel_name = $this->get('config')->get('default_channel_name');
-			$logger = new Logger($default_channel_name);
-			$log_name = "common-" . date('Y-m-d') . ".log";
-            $save_dir = APP_ROOT . static::getServiceName() . DS . 'runtime' . DS . 'logs' . DS;
-			$log_path = $save_dir . $log_name;
-			$logger->pushHandler(new StreamHandler($log_path));
-			return $logger;
-		});
-	}
-
-	/**
 	 * 初始化模拟请求服务
 	 */
 	protected function _initCurlRequest()
@@ -108,6 +93,16 @@ class BaseApp extends Components
 		$this->di->set('curl_request', function(){
 			return new 	CurlRequest();
 		});
+    }
+
+    /**
+     * 初始化request服务
+     */
+    protected function _initRequest()
+    {
+        $this->di->set('request', function(){
+            return new Request();
+        });
     }
 
     /**
@@ -232,6 +227,18 @@ class BaseApp extends Components
             $session->start();
             return $session;
         }); 
+    }
+
+    /**
+     * 设置security服务
+     */
+    protected function _initSecurity()
+    {
+        $this->di->set('security', function(){
+            $security = new Security();
+            $security->setWorkFactor(12);
+            return $security;
+        }, true);
     }
 
     /**

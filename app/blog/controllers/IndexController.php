@@ -3,6 +3,8 @@ namespace app\blog\controllers;
 
 use app\blog\service\ArticleService;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
+use core\base\Log;
+use Gregwar\Captcha\CaptchaBuilder;
 
 class IndexController extends BaseController
 {
@@ -50,7 +52,8 @@ class IndexController extends BaseController
            $this->view->setVar('condition', $condition);
        } catch (\Exception $e) {
             $error_message = $e->getMessage();
-            $this->flashSession->error($error_message); 
+            Log::getInstance()->info($error_message);
+            $this->flashSession->error("哦这就太尴尬了，首页都能挂"); 
             return $this->response->redirect('error/notFound');
        }
     }

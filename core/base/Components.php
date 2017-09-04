@@ -21,4 +21,17 @@ class Components extends Component
            $request = $this->di->get('request'); 
         }
     }
+
+    /**
+     * 获取错误信息
+     */
+    public function getErrorMessage($error_message, $class_name, $method_name, $lines)
+    {
+        $message_list = [    $error_message,
+                             $class_name,
+                             $method_name,
+                             $lines    ]; 
+        $message_str = implode(" >> ", $message_list);
+        return $message_str;
+    }
 }

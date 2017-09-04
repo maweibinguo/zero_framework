@@ -13,7 +13,7 @@ class ArticleController extends BaseController
                       ];
 
     public $page_css = [
-                            '/css/style_editor.css',
+                            '/css/style_editor.css?Df',
                             '/css/editormd.css'
                         ];
 
@@ -46,7 +46,8 @@ class ArticleController extends BaseController
                     $this->responseSuccess('文章修改成功', ['article_id' => $post_data['article_id']]);
                 } catch(\Exception $e) {
                     $error_message = $e->getMessage();
-                    $this->responseFailed($error_message);
+                    Log::getInstance()->info($error_message);
+                    $this->responseFailed("修改文章失败");
                 }
             } else {
                 try{
@@ -62,7 +63,8 @@ class ArticleController extends BaseController
                     $this->view->setVar('article_detail', $article_detail);
                 } catch (\Exception $e) {
                     $error_message = $e->getMessage();
-                    $this->flashSession->error($error_message); 
+                    Log::getInstance()->info($error_message);
+                    $this->flashSession->error('你要编辑的文章不存在啊！臣妾也很无奈。。。'); 
                     return $this->response->redirect('error/notFound');
                 }
             }
@@ -134,6 +136,9 @@ class ArticleController extends BaseController
             $article_detail['htmlcontent'] = base64_decode($article_detail['htmlcontent']);
             $article_detail['mdcontent'] = base64_decode($article_detail['mdcontent']);
             $this->view->setVar('article_detail', $article_detail);
+
+            //统计文章浏览数
+            $article_service->incrViewNumber($article_id);
         } catch(\Exception $e) {
             $error_message = $e->getMessage();
             $this->flashSession->error($error_message); 

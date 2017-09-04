@@ -1,7 +1,7 @@
 <?php
 namespace core\base;
 
-class Attach
+class Attach extends Components
 {
 
     /**

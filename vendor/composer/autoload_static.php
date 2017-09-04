@@ -6,6 +6,10 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitf754879a85754b36fa82e46913e83f2f
 {
+    public static $files = array (
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'c' => 
         array (
@@ -23,6 +27,10 @@ class ComposerStaticInitf754879a85754b36fa82e46913e83f2f
         'M' => 
         array (
             'Monolog\\' => 8,
+        ),
+        'G' => 
+        array (
+            'Gregwar\\Captcha\\' => 16,
         ),
         'F' => 
         array (
@@ -50,6 +58,10 @@ class ComposerStaticInitf754879a85754b36fa82e46913e83f2f
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Gregwar\\Captcha\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gregwar/captcha',
         ),
         'Firebase\\JWT\\' => 
         array (

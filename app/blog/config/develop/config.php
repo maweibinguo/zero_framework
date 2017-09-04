@@ -13,6 +13,14 @@ return [
                                      ]
                        ],
 
+    'check_resubmit' => [
+                            'article' => [
+                                            'edite',
+                                            'create',
+                                            'delete'
+                                         ]
+                        ],
+
     //保存登录信息的session_name
     'login_session_name' => 'insisting_login',
 

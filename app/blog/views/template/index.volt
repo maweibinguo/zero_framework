@@ -8,6 +8,8 @@
 <title><?php echo $title;?></title>
 <meta name="keywords" content="<?php echo $keywords;?>"/>
 <meta name="description" content="<?php echo $description; ?>">
+<meta name="<?php echo $this->security->getTokenKey();?>" content="<?php echo $this->security->getToken(); ?>" id="token">
+<meta name="resubmit" content="<?php echo $this->request->getUniqueValue();?>" id="resubmit">
 <?php $this->assets->outputCss('header'); ?>
 <link rel="apple-touch-icon-precomposed" href="/images/icon/icon.png">
 <!--[if gte IE 9]>
@@ -26,8 +28,6 @@
     <div class="container">
       <div class="header-topbar hidden-xs link-border">
         <ul class="site-nav topmenu">
-          <li><a href="tags.html">标签云</a></li>
-          <li><a href="readers.html" rel="nofollow">读者墙</a></li>
           <li><a href="links.html" rel="nofollow">友情链接</a></li>
           <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" rel="nofollow">关注本站 <span class="caret"></span></a>
             <ul class="dropdown-menu header-topbar-dropdown-menu">
@@ -45,7 +45,7 @@
                     <a href="/acc/logout"/> 退出登录</a>
             <?php }else{ ?>
                     Hi,请登录
-                    </a>&nbsp;&nbsp;<a href="javascript:;" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a>
+                    <!--/a>&nbsp;&nbsp;<a href="javascript:;" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a-->
             <?php } ?>
       </div>
       <div class="navbar-header">
@@ -55,8 +55,11 @@
       <div class="collapse navbar-collapse" id="header-navbar">
         <ul class="nav navbar-nav navbar-right">
           <li class="hidden-index active"><a data-cont="insisting首页" href="/index/index">insisting首页</a></li>
-          <li><a href="category.html">技术那点事</a></li>
-          <li><a href="category.html">虾扯淡</a></li>
+          <li><a href="">技术那点事</a></li>
+          <li><a href="">虾扯淡</a></li>
+          <?php if($is_login):?>
+          <li><a href="/article/create">写文章</a></li>
+          <?php endif;?>
         </ul>
         <form class="navbar-form visible-xs" action="/Search" method="post">
           <div class="input-group">
@@ -96,6 +99,13 @@
             <label for="loginModalUserPwd">密码</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" maxlength="18" autocomplete="off" required>
           </div>
+
+          <div class="form-group">
+            <label for="captcha">验证码</label>
+            <input type="text" class="form-control" id="captcha" name="captcha" width="30" placeholder="请输入验证码" maxlength="5" autocomplete="off" required>
+            <img src="/api/captcha" alt="验证码" class="img_captcha" style="cursor:pointer;"/>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -105,6 +115,41 @@
     </div>
   </div>
 </div>
+
+<!--登录注册模态框-->
+<!--div class="modal fade user-select" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form action="/acc/register" method="post" id='register_form'>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="registerModalLabel">注册</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="registerModalUserNmae">用户名</label>
+            <input type="text" class="form-control" id="registerModalUserNmae" placeholder="请输入用户名" autofocus maxlength="15" name="user_name" autocomplete="off" required>
+          </div>
+          <div class="form-group">
+            <label for="registerModalUserPwd">密码</label>
+            <input type="password" class="form-control" id="registerModalUserPwd" name="password" placeholder="请输入密码" maxlength="18" autocomplete="off" required>
+          </div>
+
+          <div class="form-group">
+            <label for="registerCaptcha">验证码</label>
+            <input type="text" class="form-control" id="registerCaptcha" name="captcha" width="30" placeholder="请输入验证码" maxlength="5" autocomplete="off" required>
+            <img src="/api/captcha" alt="验证码" class="img_captcha" style="cursor:pointer;"/>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary">注册</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div-->
 <?php $this->assets->outputJs('footer'); ?>
 </body>
 </html>

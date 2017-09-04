@@ -18,6 +18,9 @@ class ArticleModel extends BaseModel
     /* 草稿文章列表的keyname */
     const ARTICLE_DRAFT_LIST = 'article:draft:list';
 
+    /* 文章统计集合keyanem */
+    const ARTICLE_VIEW_STATISTICS = 'article_view_statistics';
+
     /* 文章状态 */
     const ARTICLE_STATUS_DRAFT = 0;//草稿
     const ARTICLE_STATUS_PUBLIC = 1;//公布
@@ -33,7 +36,8 @@ class ArticleModel extends BaseModel
         $article_detail['article_id'] = $article_key_name;
         $result = static::$redis->hMset($article_key_name, $article_detail);
         if($result === false) {
-            throw new \Exception('添加文章失败');
+            $error_message = $this->getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
+            throw new \Exception($error_message);
         }
 
         //向有序集合中添加文章keyname 分数为添加时间
@@ -56,7 +60,8 @@ class ArticleModel extends BaseModel
     {
         $result = static::$redis->hMset($article_detail['article_id'], $article_detail);
         if($result === false) {
-            throw new \Exception('添加文章失败');
+            $error_message = $this->getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
+            throw new \Exception($error_message);
         }
 
         $is_same = ($article_detail['status'] == $old_article_detail['status']) ? true : false;
@@ -65,25 +70,29 @@ class ArticleModel extends BaseModel
                 //从原有草稿集合中的文章删除
                 $delete_number = static::$redis->zDelete(static::ARTICLE_DRAFT_LIST, $article_detail['article_id']);
                 if($delete_number <= 0) {
-                    throw new \Exception('删除文章失败');
+                    $error_message = $this->getErrorMessage('删除文章失败', __CLASS__, __METHOD__, __LINE__);
+                    throw new \Exception($error_message);
                 }
 
                 //添加文章到正常集合
                 $added_number = static::$redis->zAdd(static::ARTICLE_COMMON_LIST, $article_detail['article_id']);
                 if($added_number <= 0) {
-                    throw new \Exception('添加文章成功');
+                    $error_message = $this->getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
+                    throw new \Exception($error_message);
                 }
             } else {
                 //从原有正常集合中的文章删除
                 $delete_number = static::$redis->zDelete(static::ARTICLE_COMMON_LIST, $article_detail['article_id']);
                 if($delete_number <= 0) {
-                    throw new \Exception('删除文章失败');
+                    $error_message = $this->getErrorMessage('删除文章失败', __CLASS__, __METHOD__, __LINE__);
+                    throw new \Exception($error_message);
                 }
 
                 //添加文章到草稿集合
                 $added_number = static::$redis->zAdd(static::ARTICLE_DRAFT_LIST, $article_detail['article_id']);
                 if($added_number <= 0) {
-                    throw new \Exception('添加文章成功');
+                    $error_message = $this->getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
+                    throw new \Exception($error_message);
                 }
             }
         }
@@ -104,7 +113,17 @@ class ArticleModel extends BaseModel
     {
         $deleted_number = static::$redis->delete($article_id);
         if($deleted_number <= 0) {
-            throw new \Exception('删除文章失败');
+            $error_message = $this->getErrorMessage('删除文章失败', __CLASS__, __METHOD__, __LINE__);
+            throw new \Exception($error_message);
         }
+    }
+
+    /**
+     * 增加文章的浏览量
+     */
+    public function incrViewNumber($article_id)
+    {
+        $scores = static::$redis->zIncrBy(static::ARTICLE_VIEW_STATISTICS, 1, $article_id);
+        return $scores;
     }
 }

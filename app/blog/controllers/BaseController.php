@@ -41,7 +41,7 @@ class BaseController extends Controller
                             'js/jquery.ias.js',
                             'js/scripts.js',
                             'js/layer/layer/layer.js',
-                            'js/validate/user.js'
+                            'js/validate/user.js?ff'
                         ];
 
     /**
@@ -74,10 +74,41 @@ class BaseController extends Controller
         $action_name = $dispatcher->getActionName();
         $access_controll_list = $this->config->get('needed_login');
         if(isset($access_controll_list[$controller_name]) && 
-                                                            !empty($access_controll_list[$controller_name][$action_name])) {
+                                                            in_array($action_name, $access_controll_list[$controller_name])) {
             $login_data = $this->isLogin();
             if($login_data === false) {
                 return $this->response->redirect('/index/index');
+            }
+        }
+
+        //校验是否是重复提交
+        if($this->request->isPost()) {
+            $need_check_list = $this->config->get('check_resubmit');            
+            if(isset($need_check_list[$controller_name]) && 
+                                                         in_array($action_name, $access_controll_list[$controller_name])) {
+                $post_data = $this->request->getPost();
+                $name = $this->request->getName();
+                $unique_value = $post_data[$name];
+                $check_result = $this->request->isReSumit($unique_value);
+                if($check_result === false) {
+                    if($this->request->isAjax()) {
+                        $this->responseFailed('请不要重复提交');
+                    } else {
+                        $this->flashSession->error('请不要重复提交'); 
+                        return $this->response->redirect('error/notFound');
+                    }
+                
+                }
+            }
+        }
+
+        //校验令牌
+        if($this->request->isPost() && !$this->security->checkToken()) {
+            if($this->request->isAjax()) {
+                $this->responseFailed('非法请求');
+            } else {
+                $this->flashSession->error('非法请求'); 
+                return $this->response->redirect('error/notFound');
             }
         }
     }
@@ -163,6 +194,10 @@ class BaseController extends Controller
      */
     public function responseSuccess($message = '', $data = [])
     {
+        $data['token_name'] = $this->security->getTokenKey();
+        $data['token_value'] = $this->security->getToken();
+        $data['resubmit_name'] = $this->request->getName();
+        $data['resubmit_value'] = $this->request->getUniqueValue();
         $return_data = [
                             'status'  => 'success',
                             'message' => $message,
@@ -176,6 +211,10 @@ class BaseController extends Controller
      */
     public function responseFailed($message = '', $data = [])
     {
+        $data['token_name'] = $this->security->getTokenKey();
+        $data['token_value'] = $this->security->getToken();
+        $data['resubmit_name'] = $this->request->getName();
+        $data['resubmit_value'] = $this->request->getUniqueValue();
         $return_data = [
                             'status'  => 'failed',
                             'message' => $message,

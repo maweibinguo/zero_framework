@@ -58,7 +58,8 @@ class ArticleService extends Components
         $article_model = new ArticleModel();
         $article_detail = $article_model->getArticleDetail($article_id);
         if( empty($article_detail) ) {
-            throw new \Exception('并未查找到该文章');
+            $error_message = $this->getErrorMessage('并未查找到该文章', __CLASS__, __METHOD__, __LINE__);
+            throw new \Exception($error_message);
         }
 
         //基于标签进行删除
@@ -81,7 +82,8 @@ class ArticleService extends Components
         $article_model = new ArticleModel();
         $article_detail = $article_model->getArticleDetail($article_id);
         if(empty($article_detail)) {
-            throw new \Exception('未能找到该文章，请尝试查看其它文章');   
+            $error_message = $this->getErrorMessage('未能找到该文章，请尝试查看其它文章', __CLASS__, __METHOD__, __LINE__);
+            throw new \Exception($error_message);
         }
         return $article_detail;
     }
@@ -116,5 +118,17 @@ class ArticleService extends Components
         }
 
         return $return_data;
+    }
+
+    /**
+     * 增加文章的浏览量
+     */
+    public function incrViewNumber($article_id)
+    {
+        $view_number = (int)$this->session->get('view_number');
+        if($view_number <= 0) {
+            $article_model = new ArticleModel();
+            $article_model->incrViewNumber($article_id);
+        }
     }
 }

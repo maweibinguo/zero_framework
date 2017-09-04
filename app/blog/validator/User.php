@@ -4,12 +4,13 @@
  */
 namespace app\blog\validator;
 
+use core\base\Components;
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\StringLength;
 use Phalcon\Validation\Validator\Callback;
 
-class User
+class User extends Components
 {
     /**
      * 获取添加文章是的验证器
@@ -23,9 +24,17 @@ class User
 
         //用户密码
         $validation->add('password', new PresenceOf(['message' => '用户密码必填']));
-
-        //令牌
-        //$validation->add($this->security->getTokenKey());
+    
+        //验证码
+        $validation->add('captcha', new Callback([  'callback' => function($data) {
+                                                                                        $captcha = $this->session->get('captcha');
+                                                                                        if($data['captcha'] == $captcha) {
+                                                                                            return true;
+                                                                                        } else {
+                                                                                            return false;
+                                                                                        }
+                                                                                    },
+                                                    'message'  => '验证码不正确'  ]));        
         return $validation;
     }
 }
