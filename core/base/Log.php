@@ -15,7 +15,7 @@ class Log extends Components
     private static $logger_list = [];
 
     /**
-     * 获取日志实例
+     * 获取monolog日志实例
      */
     public static function getInstance($channel= '')
     {
@@ -36,5 +36,19 @@ class Log extends Components
             static::$logger_list[$channel] = $logger;
             return static::$logger_list[$channel];
         }
+    }
+
+    /**
+     * 获取错误信息
+     */
+    public static function getErrorMessage($error_message = '', $class_name = '', $method_name = '', $lines = '')
+    {
+        $message_list = [    $error_message,
+                             $class_name,
+                             $method_name,
+                             $lines    ]; 
+        $message_list = array_filter($message_list);
+        $message_str = implode(" >> ", $message_list);
+        return $message_str;
     }
 }

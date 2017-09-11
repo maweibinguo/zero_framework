@@ -3,17 +3,18 @@ namespace app\blog\controllers;
 
 use app\blog\service\ArticleService;
 use app\blog\validator\Article as ArticleValidator;
+use core\base\Log;
 
 class ArticleController extends BaseController
 {
     public $page_js = [
                         '/js/editormd/editormd.min.js',
                         '/js/layer/layer/layer.js',
-                        '/js/validate/article.js'
+                        '/js/validate/article.js?sf'
                       ];
 
     public $page_css = [
-                            '/css/style_editor.css?Df',
+                            '/css/style_editor.css',
                             '/css/editormd.css'
                         ];
 
@@ -30,17 +31,20 @@ class ArticleController extends BaseController
                     $messages_list = $add_article_validator->validate($post_data);
                     if(count($messages_list)) {
                         foreach($messages_list as $message_item) {
-                            throw new \Exception($message_item->getMessage());
+                            $message = $message_item->getMessage();
+                            $error_message = Log::getErrorMessage($message, __CLASS__, __METHOD__, __LINE__);
+                            throw new \Exception($error_message);
                         }
                     }
                     if(empty($post_data['article_id'])) {
-                        throw new \Exception('文章编号不正确');
+                        $error_message = Log::getErrorMessage('文章编号不正确', __CLASS__, __METHOD__, __LINE__);
+                        throw new \Exception($error_message);
                     }
 
                     /* 开始修改文章 */
                     $article_service = new ArticleService(); 
-                    $post_data['mdcontent'] = base64_encode($post_data['mdcontent']);
-                    $post_data['htmlcontent'] = base64_encode($post_data['htmlcontent']);
+                    $post_data['mdcontent'] = base64_encode( $post_data['mdcontent']);
+                    $post_data['htmlcontent'] = base64_encode( $post_data['htmlcontent']);
                     $post_data['add_time'] = time();
                     $article_service->modifyArticle($post_data);
                     $this->responseSuccess('文章修改成功', ['article_id' => $post_data['article_id']]);
@@ -51,6 +55,8 @@ class ArticleController extends BaseController
                 }
             } else {
                 try{
+                    //修改添加ajaxuploadjs
+                    $this->page_js[] = '/js/ajaxfileupload.js';
                     $article_id = $this->request->get('article_id');
                     $article_service = new ArticleService();
                     $article_detail = $article_service->getArticleDetail($article_id);
@@ -84,7 +90,9 @@ class ArticleController extends BaseController
                 $messages_list = $add_article_validator->validate($post_data);
                 if(count($messages_list)) {
                     foreach($messages_list as $message_item) {
-                        throw new \Exception($message_item->getMessage());
+                        $message = $message_item->getMessage();
+                        $error_message = Log::getErrorMessage($message, __CLASS__, __METHOD__, __LINE__);
+                        throw new \Exception($error_message);
                     }
                 }
 
@@ -95,13 +103,16 @@ class ArticleController extends BaseController
                 $article_id= $article_service->addAritcle($post_data);
 
                 /* 输出返回结果 */
-                $this->response->error('文章添加成功', ['article_id' => $article_id]);
+                $this->responseSuccess('文章添加成功', ['article_id' => $article_id]);
             } catch (\Exception $e) {
                 $error_message = $e->getMessage();
-                $this->flashSession->error($error_message); 
+                Log::getInstance()->info($error_message);
+                $this->flashSession->error('创建文章失败'); 
                 return $this->response->redirect('error/notFound');
             }
         } else {
+            //修改添加ajaxuploadjs
+            $this->page_js[] = '/js/ajaxfileupload.js';
             $this->title = $this->title . '-编辑文章页面';
             $this->view->pick('article/edite');
         }
@@ -123,11 +134,13 @@ class ArticleController extends BaseController
                                 '/js/editormd/editormd.min.js',
                                 '/js/editormd/preview.js'
                                 ];
-            $this->page_css = [
-                                '/css/editormd.preview.css'
-                                ];
             $article_id = $this->request->get('article_id');
             $article_service = new ArticleService();
+
+            //增加页面浏览量
+            $article_service->incrViewNumber($article_id);
+
+            //获取文章数据
             $article_detail = $article_service->getArticleDetail($article_id);
             $article_detail['tag_list'] = explode(',', $article_detail['tag']);
             $this->title = $this->title . '-' . $article_detail['title'];
@@ -136,12 +149,10 @@ class ArticleController extends BaseController
             $article_detail['htmlcontent'] = base64_decode($article_detail['htmlcontent']);
             $article_detail['mdcontent'] = base64_decode($article_detail['mdcontent']);
             $this->view->setVar('article_detail', $article_detail);
-
-            //统计文章浏览数
-            $article_service->incrViewNumber($article_id);
         } catch(\Exception $e) {
             $error_message = $e->getMessage();
-            $this->flashSession->error($error_message); 
+            Log::getInstance()->info($error_message);
+            $this->flashSession->error('尴尬了，该文章已经飞走了'); 
             return $this->response->redirect('error/notFound');
         }
     }
@@ -167,13 +178,18 @@ class ArticleController extends BaseController
     public function deleteAction()
     {
         try{
-            $article_id = $this->request->get('article_id');
-            $article_service = new ArticleService();
-            $article_service->deleteTargetArticle($article_id);
-            $this->responseSuccess('删除成功', []);
+            if($this->request->isPost()) {
+                $article_id = $this->request->getPost('article_id');
+                $article_service = new ArticleService();
+                $article_service->deleteTargetArticle($article_id);
+                $this->responseSuccess('删除成功', []);
+            } else {
+                throw new \Exception('请求方式不正确');
+            }
         } catch(\Exception $e) {
             $error_message = $e->getMessage();
-            $this->responseFailed($error_message, []);
+            Log::getInstance()->info($error_message);
+            $this->responseFailed('尴尬了，文章删除失败', []);
         }
     }
 }

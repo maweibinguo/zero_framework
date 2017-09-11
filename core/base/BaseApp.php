@@ -5,14 +5,13 @@ use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;
 use Phalcon\Loader;
 use Phalcon\Security;
 use Noodlehaus\Config as NoodConfig;
-use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use core\base\Components;
 use core\base\Router;
 use core\curl\CurlRequest;
 use core\base\mq\MqFactory;
 use core\base\Response;
-use core\base\Request;
+use core\base\ReSubmition;
 
 /**
  * 注册框架需要的核心服务组件
@@ -95,14 +94,14 @@ class BaseApp extends Components
 		});
     }
 
-    /**
-     * 初始化request服务
-     */
-    protected function _initRequest()
-    {
-        $this->di->set('request', function(){
-            return new Request();
-        });
+	/**
+	 * 初始化模拟请求服务
+	 */
+	protected function _initReSubmition()
+	{
+		$this->di->set('resubmition', function(){
+			return new ReSubmition();
+		});
     }
 
     /**

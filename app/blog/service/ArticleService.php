@@ -7,6 +7,9 @@ namespace app\blog\service;
 use core\base\Components;
 use app\blog\models\ArticleModel;
 use app\blog\models\ArticleTagModel;
+use app\blog\models\ArticleCategoryModel;
+use app\blog\models\MottoModel;
+use core\base\Log;
 
 class ArticleService extends Components
 {
@@ -17,16 +20,22 @@ class ArticleService extends Components
     {
         //添加文章
         $article_model = new ArticleModel();
+        $article_tag_model = new ArticleTagModel();
+        $article_category = new ArticleCategoryModel();
         $article_detail['add_time'] = time();
         $article_key_name = $article_model->addArticle($article_detail);
 
-        //添加文章标签
-        $article_tag_model = new ArticleTagModel();
-        $article_tag_model->addArticleTag([
-                                            'tag'              => $article_detail['tag'],
-                                            'article_key_name' => $article_key_name,
-                                            'add_time'         => $article_detail['add_time']
-                                          ]);
+        if($article_detail['status'] == ArticleModel::ARTICLE_STATUS_PUBLIC) {
+            //添加文章标签
+            $article_tag_model->addArticleTag([
+                                                'tag'              => $article_detail['tag'],
+                                                'article_key_name' => $article_key_name,
+                                                'add_time'         => $article_detail['add_time']
+                                            ]);
+
+            //添加文章类别
+            $article_category->addArticleToCategory($article_key_name, $article_detail['category'], $article_detail['add_time']);
+        }
 
         //返回结果
         return $article_key_name;
@@ -44,6 +53,10 @@ class ArticleService extends Components
         $article_tag_model = new ArticleTagModel();
         $article_tag_model->editeArticleTag($article_detail, $old_article_detail);
 
+        //更新文章所在的类别
+        $article_category = new ArticleCategoryModel();
+        $article_category->editeCategoryForArticle($article_detail, $old_article_detail);
+
         //更新文章的内容
         $article_model = new ArticleModel();
         $article_model->editeArticle($article_detail, $old_article_detail);
@@ -58,19 +71,29 @@ class ArticleService extends Components
         $article_model = new ArticleModel();
         $article_detail = $article_model->getArticleDetail($article_id);
         if( empty($article_detail) ) {
-            $error_message = $this->getErrorMessage('并未查找到该文章', __CLASS__, __METHOD__, __LINE__);
+            $error_message = Log::getErrorMessage('并未查找到该文章', __CLASS__, __METHOD__, __LINE__);
             throw new \Exception($error_message);
         }
 
-        //基于标签进行删除
-        $tag_list = explode(',', $article_detail['tag']);
-        $article_tag_model = new ArticleTagModel();
-        foreach($tag_list as $tag_name) {
-            $article_tag_model->deleteArticleFromTargetTag($article_id, $tag_name);
+        if($article_detail['status'] == ArticleModel::ARTICLE_STATUS_PUBLIC) {
+
+            //基于标签进行删除
+            $tag_list = explode(',', $article_detail['tag']);
+            $article_tag_model = new ArticleTagModel();
+            foreach($tag_list as $tag_name) {
+                $article_tag_model->deleteArticleFromTargetTag($article_id, $tag_name);
+            }
+
+            //在对应的类别下删除 
+            $article_category = new ArticleCategoryModel();
+            $article_category->deleteArticleFromCategory($article_id, $article_detail['category']);
         }
 
         //删除该文章
         $article_model->deleteArticleByArticleID($article_id);
+
+        //从文章列表中进行删除
+        $article_model->deleteArticleFromList($article_id, $article_detail['status']);
     }
 
 
@@ -82,7 +105,7 @@ class ArticleService extends Components
         $article_model = new ArticleModel();
         $article_detail = $article_model->getArticleDetail($article_id);
         if(empty($article_detail)) {
-            $error_message = $this->getErrorMessage('未能找到该文章，请尝试查看其它文章', __CLASS__, __METHOD__, __LINE__);
+            $error_message = Log::getErrorMessage('未能找到该文章，请尝试查看其它文章', __CLASS__, __METHOD__, __LINE__);
             throw new \Exception($error_message);
         }
         return $article_detail;
@@ -110,14 +133,21 @@ class ArticleService extends Components
             $article_tag_model = new ArticleTagModel();
             $return_data = $article_tag_model->getArticleListByTag($condition);
             return $return_data;
+        } elseif(!empty($condition['category'])) {
+            $article_category_model = new ArticleCategoryModel();
+            $return_data = $article_category_model->getArticleListByCategory($condition);
+            return $return_data;
+        } elseif(isset($condition['status'])) {
+            $article_model = new ArticleModel();
+            $return_data = $article_model->getDraftArticleList($condition);
+            return $return_data;
         } else {
             $article_list = $this->redis->zRevRange(ArticleModel::ARTICLE_COMMON_LIST, $condition['start'], $condition['end']);
             $article_number = $this->redis->zCard(ArticleModel::ARTICLE_COMMON_LIST);
             $return_data['article_number'] = $article_number;
             $return_data['article_list'] = $article_list;
+            return $return_data;
         }
-
-        return $return_data;
     }
 
     /**
@@ -125,10 +155,39 @@ class ArticleService extends Components
      */
     public function incrViewNumber($article_id)
     {
-        $view_number = (int)$this->session->get('view_number');
-        if($view_number <= 0) {
+        $article_view_statistics = (int)$this->session->get('article_view_statistics');
+        if($article_view_statistics <= 0) {
             $article_model = new ArticleModel();
-            $article_model->incrViewNumber($article_id);
+            $article_view_statistics = $article_model->incrViewNumber($article_id);
+            $this->session->set('article_view_statistics', $article_view_statistics);
         }
+    }
+
+    /**
+     * 获取标签
+     */
+    public function getTagList()
+    {
+        $tag_list_format = [];
+
+        $article_tag_model = new ArticleTagModel(); 
+        $tag_list = $article_tag_model->getTagList();
+        if(is_array($tag_list)) {
+            foreach($tag_list as $tag_key => $tag_name) {
+                $row_number = (int) ( ($tag_key + 1) / 3 );
+                $tag_list_format[$row_number][] = $tag_name;
+            }
+        }
+        return $tag_list_format;
+    }
+
+    /**
+     * 获取格言
+     */
+    public function getMotto()
+    {
+        $motto_model = new MottoModel();
+        $motto = $motto_model->getMotto();
+        return $motto;
     }
 }

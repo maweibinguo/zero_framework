@@ -3,6 +3,7 @@
  * 文章model
  */
 namespace app\blog\models;
+use core\base\Log;
 
 class ArticleModel extends BaseModel
 {
@@ -18,12 +19,12 @@ class ArticleModel extends BaseModel
     /* 草稿文章列表的keyname */
     const ARTICLE_DRAFT_LIST = 'article:draft:list';
 
-    /* 文章统计集合keyanem */
-    const ARTICLE_VIEW_STATISTICS = 'article_view_statistics';
-
     /* 文章状态 */
     const ARTICLE_STATUS_DRAFT = 0;//草稿
     const ARTICLE_STATUS_PUBLIC = 1;//公布
+
+    /* 文章类别 */
+    const ARTICLE_CATEGORY = 'article_category_%s';
 
     /**
      * 保存文章
@@ -31,12 +32,16 @@ class ArticleModel extends BaseModel
     public function addArticle($article_detail)
     {
         //保存文章
+        if(!isset($article_detail['article_view_statistics']) || 
+                                                                (int)$article_detail['article_view_statistics'] <= 0 ) {
+            $article_detail['article_view_statistics'] = 1;    
+        }
         $number = static::$redis->incr(static::ARTICLE_COUNT);
         $article_key_name = $this->getKeyName([static::ARTICLE_DETAIL, $number]);
         $article_detail['article_id'] = $article_key_name;
         $result = static::$redis->hMset($article_key_name, $article_detail);
         if($result === false) {
-            $error_message = $this->getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
+            $error_message = Log::getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
             throw new \Exception($error_message);
         }
 
@@ -60,38 +65,38 @@ class ArticleModel extends BaseModel
     {
         $result = static::$redis->hMset($article_detail['article_id'], $article_detail);
         if($result === false) {
-            $error_message = $this->getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
+            $error_message = Log::getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
             throw new \Exception($error_message);
         }
 
         $is_same = ($article_detail['status'] == $old_article_detail['status']) ? true : false;
         if($is_same === false) {
-            if($article_detail['Status'] == static::ARTICLE_STATUS_PUBLIC) {
+            if($article_detail['status'] == static::ARTICLE_STATUS_PUBLIC) {
                 //从原有草稿集合中的文章删除
                 $delete_number = static::$redis->zDelete(static::ARTICLE_DRAFT_LIST, $article_detail['article_id']);
                 if($delete_number <= 0) {
-                    $error_message = $this->getErrorMessage('删除文章失败', __CLASS__, __METHOD__, __LINE__);
+                    $error_message = Log::getErrorMessage('删除文章失败', __CLASS__, __METHOD__, __LINE__);
                     throw new \Exception($error_message);
                 }
 
                 //添加文章到正常集合
-                $added_number = static::$redis->zAdd(static::ARTICLE_COMMON_LIST, $article_detail['article_id']);
+                $added_number = static::$redis->zAdd(static::ARTICLE_COMMON_LIST, $article_detail['add_time'], $article_detail['article_id']);
                 if($added_number <= 0) {
-                    $error_message = $this->getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
+                    $error_message = Log::getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
                     throw new \Exception($error_message);
                 }
             } else {
                 //从原有正常集合中的文章删除
                 $delete_number = static::$redis->zDelete(static::ARTICLE_COMMON_LIST, $article_detail['article_id']);
                 if($delete_number <= 0) {
-                    $error_message = $this->getErrorMessage('删除文章失败', __CLASS__, __METHOD__, __LINE__);
+                    $error_message = Log::getErrorMessage('删除文章失败', __CLASS__, __METHOD__, __LINE__);
                     throw new \Exception($error_message);
                 }
 
                 //添加文章到草稿集合
-                $added_number = static::$redis->zAdd(static::ARTICLE_DRAFT_LIST, $article_detail['article_id']);
+                $added_number = static::$redis->zAdd(static::ARTICLE_DRAFT_LIST, $article_detail['add_time'], $article_detail['article_id']);
                 if($added_number <= 0) {
-                    $error_message = $this->getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
+                    $error_message = Log::getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
                     throw new \Exception($error_message);
                 }
             }
@@ -113,8 +118,25 @@ class ArticleModel extends BaseModel
     {
         $deleted_number = static::$redis->delete($article_id);
         if($deleted_number <= 0) {
-            $error_message = $this->getErrorMessage('删除文章失败', __CLASS__, __METHOD__, __LINE__);
+            $error_message = Log::getErrorMessage('删除文章失败', __CLASS__, __METHOD__, __LINE__);
             throw new \Exception($error_message);
+        }
+    }
+
+    /**
+     * 从列表中删除文章
+     */
+    public function deleteArticleFromList($article_id, $article_status)
+    {
+        switch($article_status) {
+            case static::ARTICLE_STATUS_DRAFT:
+                static::$redis->zDelete(static::ARTICLE_DRAFT_LIST, $article_id);
+                break;
+            case static::ARTICLE_STATUS_PUBLIC:
+                static::$redis->zDelete(static::ARTICLE_COMMON_LIST, $article_id);
+                break;
+            default:
+                break;
         }
     }
 
@@ -123,7 +145,26 @@ class ArticleModel extends BaseModel
      */
     public function incrViewNumber($article_id)
     {
-        $scores = static::$redis->zIncrBy(static::ARTICLE_VIEW_STATISTICS, 1, $article_id);
-        return $scores;
+        $view_number = static::$redis->hIncrBy($article_id, 'article_view_statistics', 1);
+        return $view_number;
+    }
+
+    /**
+     * 获取草稿列表
+     */
+    public function getDraftArticleList()
+    {
+        $return_data = [];
+
+        $article_number = static::$redis->zCard(static::ARTICLE_DRAFT_LIST);
+        $return_data['article_number'] = $article_number;
+
+        $article_list = static::$redis->zRevRange(  static::ARTICLE_DRAFT_LIST, 
+                                                    $condition['start'], 
+                                                    $condition['page_size']
+                                                      );
+        $return_data['article_list'] = $article_list;
+
+        return $return_data;
     }
 }

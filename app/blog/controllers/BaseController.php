@@ -4,6 +4,7 @@ namespace app\blog\controllers;
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\View;
 use core\base\Zero;
+use core\base\ReSubmition;
 
 class BaseController extends Controller
 {
@@ -50,7 +51,7 @@ class BaseController extends Controller
     public $common_css = [
                             'css/bootstrap.min.css',
                             'css/nprogress.css',
-                            'css/style.css',
+                            'css/style.css?Sdf',
                             'css/font-awesome.min.css'
                          ];
 
@@ -87,9 +88,9 @@ class BaseController extends Controller
             if(isset($need_check_list[$controller_name]) && 
                                                          in_array($action_name, $access_controll_list[$controller_name])) {
                 $post_data = $this->request->getPost();
-                $name = $this->request->getName();
+                $name = $this->resubmition->getName();
                 $unique_value = $post_data[$name];
-                $check_result = $this->request->isReSumit($unique_value);
+                $check_result = $this->resubmition->isReSumit($unique_value);
                 if($check_result === false) {
                     if($this->request->isAjax()) {
                         $this->responseFailed('请不要重复提交');
@@ -138,6 +139,9 @@ class BaseController extends Controller
         } else {
             $this->view->setVar('is_login', false);
         }
+
+        $category_list = $this->config->get('category_list');
+        $this->view->setVar('category_list', $category_list);
         $this->view->disableLevel($this->disable_level);
     }
 
@@ -196,8 +200,8 @@ class BaseController extends Controller
     {
         $data['token_name'] = $this->security->getTokenKey();
         $data['token_value'] = $this->security->getToken();
-        $data['resubmit_name'] = $this->request->getName();
-        $data['resubmit_value'] = $this->request->getUniqueValue();
+        $data['resubmit_name'] = $this->resubmition->getName();
+        $data['resubmit_value'] = $this->resubmition->getUniqueValue();
         $return_data = [
                             'status'  => 'success',
                             'message' => $message,
@@ -213,8 +217,8 @@ class BaseController extends Controller
     {
         $data['token_name'] = $this->security->getTokenKey();
         $data['token_value'] = $this->security->getToken();
-        $data['resubmit_name'] = $this->request->getName();
-        $data['resubmit_value'] = $this->request->getUniqueValue();
+        $data['resubmit_name'] = $this->resubmition->getName();
+        $data['resubmit_value'] = $this->resubmition->getUniqueValue();
         $return_data = [
                             'status'  => 'failed',
                             'message' => $message,
@@ -236,5 +240,16 @@ class BaseController extends Controller
         }
         $result = (array)$this->jwt->decrypt($login_session_data);
         return $result;
+    }
+
+    /**
+     * 获取是周几
+     */
+    public function getWeekDay($timestamp = null)
+    {
+        if(!isset($timestamp)) $timestamp = time();
+        $week_day = date('w', $timestamp);
+        $week_list =array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");  
+        return $week_list[$week_day];
     }
 }

@@ -48,9 +48,14 @@ class Article
         $validation->add('htmlcontent', new PresenceOf([   'message' => '文章内容必填' ]));
         $validation->setFilters('htmlcontent', 'trim');
         
+        //文章类别
+        $validation->add('category', new PresenceOf([   'message' => '请选择文章类别' ]));
+        $validation->setFilters('category', 'trim');
 
-        //文章令牌
-        //$validation->add($this->security->getTokenKey());
+        //文章头图
+        $validation->add('headimage', new PresenceOf([   'message' => '请上传文章头图' ]));
+        $validation->setFilters('headimage', 'trim');
+
         return $validation;
     }
 }

@@ -25,5 +25,11 @@ return [
     'login_session_name' => 'insisting_login',
 
     //jwt的秘钥
-    'jwt' => [  'secure_key' => 'b1e10b5df9cc96729b65f6833ea2f960'  ]
+    'jwt' => [  'secure_key' => 'b1e10b5df9cc96729b65f6833ea2f960'  ],
+
+    //文章类别
+    'category_list' => [
+                            'it' => '技术那点事',
+                            'hereandthere' => '虾扯淡'
+                        ]
 ];

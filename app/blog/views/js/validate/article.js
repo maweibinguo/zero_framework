@@ -6,6 +6,8 @@ $('.submit').on('click',function(){
                     function(index){
                         var title = $.trim($('#title').val());
                         var tag = $.trim($('#tag').val());
+                        var category = $.trim($('#category').val());
+                        var headimage = $.trim($('#headimage').val());
                         var mdcontent = $.trim(testEditor.getMarkdown());
                         var htmlcontent = $.trim(testEditor.getHTML()); 
                         var article_id = $.trim($('#article_id').val())
@@ -17,6 +19,14 @@ $('.submit').on('click',function(){
                             layer.alert('请填写文章标题');
                             return false;
                         }
+                        if(category == '') {
+                            layer.alert('请选择文章类别');
+                            return false;
+                        }
+                        if(headimage == '') {
+                            layer.alert('请上传文章头图');
+                            return false;
+                        }
                         if(mdcontent == '' || htmlcontent == '') {
                             layer.alert('请编写文章内容');
                             return false;
@@ -26,7 +36,9 @@ $('.submit').on('click',function(){
                                             'tag':tag,
                                             'mdcontent':mdcontent,
                                             'htmlcontent':htmlcontent,
-                                            'status':status
+                                            'status':status,
+                                            'category':category,
+                                            'headimage':headimage
                                         };
 
                         if(article_id) {
@@ -49,11 +61,47 @@ $('.submit').on('click',function(){
                  );    
 });
 
-var testEditor;
+/**
+ * ajax上传图片功能，文章头图使用
+ */
+$('.default_image, .upload-button').on('click',function(){
+    $('#openview').click();
+});
 
+$('body').on('change', '#openview', function(){
+    ajaxFileUpload();
+})
+
+function ajaxFileUpload() {
+    $.ajaxFileUpload
+    (
+        {
+            global:true,
+            url: '/upload/index', //用于文件上传的服务器端请求地址
+            secureuri: false, //是否需要安全协议，一般设置为false
+            fileElementId: 'openview', //文件上传域的ID
+            dataType: 'json', //返回值类型 一般设置为json
+            complete:function(data){
+                var response = $.parseJSON(data.responseText);
+                if(response.success == '1') {
+                    $('.default_image').attr('src', response.url);
+                    $('#headimage').val(response.url);
+                } else {
+                    layer.alert(response.message);
+                }
+                $('#openview').val('');
+            }
+        }
+    )
+    return false;
+}
+/**
+ * 编辑器上传图片功能
+ */
+var testEditor;
 $(function() {
     testEditor = editormd("test-editormd", {
-        width   : "100%",
+        width   : "90%",
         height  : "750px",
         syncScrolling : "single",
         path    : "/js/editormd/lib/",
@@ -68,6 +116,5 @@ $(function() {
         //时序图
         sequenceDiagram : true,
         editorTheme : editormd.editorThemes['ambiance'],
-        
     });
 });

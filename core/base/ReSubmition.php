@@ -4,14 +4,12 @@
  */
 namespace core\base;
 
-use Phalcon\Http\Request as FrameRequest;
-
-class Request extends FrameRequest
+class ReSubmition extends Components
 {
     /**
      * 唯一值的name
      */
-    private $name = 'is_resubmit';
+    private $name = 'resubmit';
 
     /**
      * 获取唯一串
@@ -29,7 +27,7 @@ class Request extends FrameRequest
     {
         $result = $this->redis->setNx($unique_value, 1);   
         if($result === true) {
-            $this->redis->expire(5);
+            $this->redis->expire($unique_value, 5);
         }
         return $result;
     }

@@ -1,5 +1,3 @@
-<div class="content-wrap">
-<div class="content">
   <!-- 文章标题 -->
   <header class="article-header">
     <h1 class="article-title"><?php echo $article_detail['title'];?></h1>
@@ -8,12 +6,12 @@
       <span class="glyphicon glyphicon-calendar"></span>
       <?php echo date('Y-m-d H:i:s',$article_detail['add_time']);?></time>
       &nbsp;&nbsp;
-      <span class="views"><i class="glyphicon glyphicon-eye-open"></i> 共120人浏览</span>
+      <span class="views"><i class="glyphicon glyphicon-eye-open"></i> 共<?php echo $article_detail['article_view_statistics']; ?>人浏览</span>
       <?php if($is_login) :?>
       &nbsp;&nbsp;
       <a href='/article/edite?article_id=<?php echo $article_detail['article_id'];?>'/><span class="glyphicon glyphicon-edit">编辑</span></a>
       &nbsp;&nbsp;
-       <a href="javascript:void(0)"  url="/article/delete?article_id=<?php echo $article_detail['article_id'];?>" id="delete_article"/><span class="glyphicon glyphicon-remove-circle"></span>删除</a>
+       <a href="javascript:void(0)"  article_id="<?php echo $article_detail['article_id'];?>" id="delete_article"/><span class="glyphicon glyphicon-remove-circle"></span>删除</a>
       <?php endif;?>
       </span> 
     </div>
@@ -72,8 +70,3 @@
     </ol>
     <div class="quotes"><span class="disabled">首页</span><span class="disabled">上一页</span><a class="current">1</a><a href="">2</a><span class="disabled">下一页</span><span class="disabled">尾页</span></div>
   </div-->
-</div>
-</div>
-<?php
-    $this->partial("share/sidebar");
-?>

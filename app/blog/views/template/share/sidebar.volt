@@ -32,25 +32,39 @@
           </div>
         </div>
       </div>
-      <div class="widget widget_search">
+      <!--div class="widget widget_search">
         <form class="navbar-form" action="/Search" method="post">
           <div class="input-group">
             <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字" maxlength="15" autocomplete="off">
             <span class="input-group-btn">
-            <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+            <-button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
             </span> </div>
         </form>
-      </div>
+      </div-->
     </div>
     <div class="widget widget_sentence">
       <h3>每日一句</h3>
       <div class="widget-sentence-content">
-        <h4>2016年01月05日星期二</h4>
-        <p>Do not let what you cannot do interfere with what you can do.<br />
-          别让你不能做的事妨碍到你能做的事。（John Wooden）</p>
+        <h4><?php if(isset($date)) echo $date; ?></h4>
+        <p><?php if(isset($motto)) echo $motto; ?></p>
       </div>
     </div>
     <div class="widget widget_hot">
-      <h3>insisting标签</h3>
+          <h3>insisting标签</h3>
+          <div class="widget-sentence-content">
+              <table class="table text-center" style="border:none;" style="margin-top:20%;">
+                  <tbody>
+                    <?php if(isset($tag_list) && is_array($tag_list)) { ?>
+                        <?php foreach($tag_list as $tag_item) { ?>
+                            <tr>
+                            <?php foreach($tag_item as $tag_name) { ?>
+                                <td><a href="/index/index?tag=<?php echo $tag_name;?>"><?php echo $tag_name;?></a></td>
+                            <?php } ?>
+                            </tr>
+                        <?php } ?>
+                    <?php } ?>
+                  </tbody>
+              </table>  
+          </div>
     </div>
   </aside>

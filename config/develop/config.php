@@ -36,4 +36,6 @@ return [
                             ],
     //default_namespace
     'default_namespace'   => '\\app\\',
+
+
 ];

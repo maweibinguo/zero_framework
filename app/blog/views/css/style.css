@@ -2196,3 +2196,8 @@ color:#FFF;
 #loginModal .modal-body input {
 	color: #A0A0A0;
 }
+
+/* 重写bootstrap部分样式 */
+.table{
+     border: 0px solid transparent !important;
+ }

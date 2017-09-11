@@ -4,6 +4,8 @@
  */
 namespace app\blog\models;
 
+use core\base\Log;
+
 class UserModel extends BaseModel
 {
     /* 用户有序集合 */
@@ -26,7 +28,8 @@ class UserModel extends BaseModel
         /* 添加到有序集合 */
         $add_number = static::$redis->zAdd(static::USER_ZSORT_LIST, $user_id, $user_data['user_name']);
         if($add_number == 0) {
-            throw new \Exception('该用户名已经存在, 请更换其他用户名注册');
+            $error_message = Log::getErrorMessage('该用户名已经存在, 请更换其他用户名注册');
+            throw new \Exception($error_message);
         }
 
         /* 添加用户详情信息 */
@@ -35,7 +38,8 @@ class UserModel extends BaseModel
         $user_data['password'] = password_hash($user_data['password'], PASSWORD_DEFAULT);
         $set_result = static::$redis->hMSet($user_key_name, $user_data);
         if($set_result === false) {
-            throw new \Exception('保存用户注册信息失败');
+            $error_message = Log::getErrorMessage('保存用户注册信息失败');
+            throw new \Exception($error_message);
         }
     }
 
@@ -46,13 +50,15 @@ class UserModel extends BaseModel
     {
         $user_id = static::$redis->zScore(static::USER_ZSORT_LIST, $user_name); 
         if($user_id <= 0) {
-            throw new \Exception('获取用户编号失败');
+            $error_message = Log::getErrorMessage('获取用户编号失败');
+            throw new \Exception($error_message);
         }
         $user_key_name = $this->getKeyName([    static::USER_HASH_DETAIL,
                                                 $user_id    ]);
         $user_detail = static::$redis->hGetAll($user_key_name);
         if(!is_array($user_detail) || empty($user_detail)) {
-            throw new \Exception('用户名或者密码错误');
+            $error_message = Log::getErrorMessage('用户名或者密码错误');
+            throw new \Exception($error_message);
         }
         return $user_detail;
     }
@@ -66,7 +72,8 @@ class UserModel extends BaseModel
         $user_detail = $this->getUserDetail($user_name);
         $validate_result = password_verify($password, $user_detail['password']);
         if($validate_result === false) {
-            throw new \Exception('用户名或者密码错误');
+            $error_message = Log::getErrorMessage('用户名或者密码错误');
+            throw new \Exception($error_message);
         }
         return $user_detail;
     }

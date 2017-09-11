@@ -9,7 +9,7 @@
 <meta name="keywords" content="<?php echo $keywords;?>"/>
 <meta name="description" content="<?php echo $description; ?>">
 <meta name="<?php echo $this->security->getTokenKey();?>" content="<?php echo $this->security->getToken(); ?>" id="token">
-<meta name="resubmit" content="<?php echo $this->request->getUniqueValue();?>" id="resubmit">
+<meta name="resubmit" content="<?php echo $this->resubmition->getUniqueValue();?>" id="resubmit">
 <?php $this->assets->outputCss('header'); ?>
 <link rel="apple-touch-icon-precomposed" href="/images/icon/icon.png">
 <!--[if gte IE 9]>
@@ -55,9 +55,12 @@
       <div class="collapse navbar-collapse" id="header-navbar">
         <ul class="nav navbar-nav navbar-right">
           <li class="hidden-index active"><a data-cont="insisting首页" href="/index/index">insisting首页</a></li>
-          <li><a href="">技术那点事</a></li>
-          <li><a href="">虾扯淡</a></li>
+          <?php if(isset($category_list)) ?>
+          <?php foreach($category_list as $value => $name) { ?>
+          <li><a href="/index/index?category=<?php echo $value;?>"><?php echo $name; ?></a></li>
+          <?php } ?>
           <?php if($is_login):?>
+          <li><a href="/index/index?status=0">草稿列表</a></li>
           <li><a href="/article/create">写文章</a></li>
           <?php endif;?>
         </ul>

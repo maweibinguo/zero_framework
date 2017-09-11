@@ -39,7 +39,6 @@
       <li><span>共 <span id='total_page_number'><?php echo $condition['total_page_number'];?></span> 页</span></li>
     </ul>
   </nav>
-
 </div>
 </div>
 <?php

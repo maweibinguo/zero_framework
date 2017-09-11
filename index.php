@@ -3,7 +3,6 @@
  * 命令行入口文件
  * @author zero<maweibinguo@163.com>
  */
-date_default_timezone_set("Asia/Shanghai");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 

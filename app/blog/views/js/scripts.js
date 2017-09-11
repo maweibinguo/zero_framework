@@ -134,7 +134,8 @@ var ias = jQuery.ias({
 		$('.excerpt a').attr('draggable','false');
 	},
     onPageChange:function(pageNum, pageUrl, scrollOffset) {
-        if(pageNum > $('#total_page_number').val()) {
+        console.log(pageNum, $('#total_page_number').text());
+        if(pageNum > $('#total_page_number').text()) {
             return false;
         }
     }

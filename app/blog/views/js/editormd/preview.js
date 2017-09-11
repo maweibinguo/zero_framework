@@ -23,14 +23,15 @@ $(function() {
         });
 
         $('#delete_article').on('click', function(){
-            var url = $(this).attr('url');
+            var article_id = $(this).attr('article_id');
             layer.confirm(  '是否要删除该文章', 
                             {'icon':3, 'title':'提示'},
                             function(index) {
                                     $.ajax({
                                         'dataType':'json',
-                                        'url':url,
-                                        'type':'get',
+                                        'data':{'article_id':article_id},
+                                        'type':'post',
+                                        'url':"/article/delete",
                                         'success':function(data){
                                              if(data.status == 'success') {
                                                 return window.location.href='/index/index';  
