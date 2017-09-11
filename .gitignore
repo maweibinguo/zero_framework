@@ -6,3 +6,4 @@ develop/*
 logs/*
 *.htaccess
 runtime/*
+config.php
