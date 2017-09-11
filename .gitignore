@@ -5,3 +5,4 @@ product/*
 develop/*
 logs/*
 *.htaccess
+runtime/*
