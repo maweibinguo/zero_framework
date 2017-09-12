@@ -66,6 +66,11 @@ class BaseController extends Controller
     public $page_css = [];
 
     /**
+     * 是否登录
+     */
+    public $is_login = false;
+
+    /**
      * 在路由前执行的方法
      */
     public function beforeExecuteRoute($dispatcher)
@@ -74,9 +79,13 @@ class BaseController extends Controller
         $controller_name = $dispatcher->getControllerName();
         $action_name = $dispatcher->getActionName();
         $access_controll_list = $this->config->get('needed_login');
+        $login_data = $this->isLogin();
+        if($login_data != false) {
+            $this->is_login = true;
+        }
+
         if(isset($access_controll_list[$controller_name]) && 
                                                             in_array($action_name, $access_controll_list[$controller_name])) {
-            $login_data = $this->isLogin();
             if($login_data === false) {
                 return $this->response->redirect('/index/index');
             }

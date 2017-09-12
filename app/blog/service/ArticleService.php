@@ -35,6 +35,11 @@ class ArticleService extends Components
 
             //添加文章类别
             $article_category->addArticleToCategory($article_key_name, $article_detail['category'], $article_detail['add_time']);
+
+            //添加今日推荐
+            if($article_detail['ishot'] == ArticleModel::HOT_STATUS_COMMON) {
+                $article_model->addHotArticle($article_key_name);
+            }
         }
 
         //返回结果
@@ -59,6 +64,7 @@ class ArticleService extends Components
 
         //更新文章的内容
         $article_model = new ArticleModel();
+        $article_model->editeHotArticle($article_detail, $old_article_detail);
         $article_model->editeArticle($article_detail, $old_article_detail);
     }
 
@@ -189,5 +195,15 @@ class ArticleService extends Components
         $motto_model = new MottoModel();
         $motto = $motto_model->getMotto();
         return $motto;
+    }
+
+    /**
+     * 获取今日推荐
+     */
+    public function getHotArticle()
+    {
+        $article_model = new ArticleModel(); 
+        $hot_article_detail = $article_model->getHotArticle();
+        return $hot_article_detail;
     }
 }

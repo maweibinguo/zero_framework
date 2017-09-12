@@ -11,6 +11,7 @@ $('.submit').on('click',function(){
                         var mdcontent = $.trim(testEditor.getMarkdown());
                         var htmlcontent = $.trim(testEditor.getHTML()); 
                         var article_id = $.trim($('#article_id').val())
+                        var ishot = $.trim($('#ishot').val());    
                         if(title == '') {
                             layer.alert('请填写文章标题');
                             return false;
@@ -31,6 +32,9 @@ $('.submit').on('click',function(){
                             layer.alert('请编写文章内容');
                             return false;
                         }
+                        if(ishot == '') {
+                            layer.alert('请选择是否是今日推荐');
+                        }
                         var post_data = {
                                             'title':title,
                                             'tag':tag,
@@ -38,7 +42,8 @@ $('.submit').on('click',function(){
                                             'htmlcontent':htmlcontent,
                                             'status':status,
                                             'category':category,
-                                            'headimage':headimage
+                                            'headimage':headimage,
+                                            'ishot':ishot
                                         };
 
                         if(article_id) {

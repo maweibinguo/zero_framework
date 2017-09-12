@@ -34,7 +34,11 @@ class IndexController extends BaseController
                $condition['category'] = $category;
            }
            $status = $this->request->get('status');
-           if( $status == 0 ) {
+           if( isset($status) && $status == 0 ) {
+               $is_login = $this->isLogin();
+               if($is_login === false) {
+                    throw new \Exception('请先登录');     
+               }
                $condition['status'] = $status;
            }
 
@@ -56,6 +60,15 @@ class IndexController extends BaseController
                $article_list[$key] = $article_detail;
            }
 
+
+           //获取今日推荐
+           $hot_article_detail = $article_service->getHotArticle();
+           $htmlcontent = strip_tags(base64_decode($hot_article_detail['htmlcontent']));
+           $htmlcontent = mb_substr($htmlcontent, 0, 100);
+           $hot_article_detail['htmlcontent'] = $htmlcontent;
+           unset($hot_article_detail['mdcontent']);
+           $hot_article_detail['add_time'] = date('Y-m-d H:i:s', $hot_article_detail['add_time']);
+
            //获取标签
            $tag_list = $article_service->getTagList();
 
@@ -72,10 +85,11 @@ class IndexController extends BaseController
            $this->view->setVar('tag_list', $tag_list);
            $this->view->setVar('motto', $motto);
            $this->view->setVar('date', $date);
+           $this->view->setVar('hot_article_detail', $hot_article_detail);
        } catch (\Exception $e) {
             $error_message = $e->getMessage();
             Log::getInstance()->info($error_message);
-            $this->flashSession->error("哦这就太尴尬了，首页都能挂"); 
+            $this->flashSession->error("请先登录"); 
             return $this->response->redirect('error/notFound');
        }
     }

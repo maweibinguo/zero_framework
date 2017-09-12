@@ -10,7 +10,7 @@ class ArticleController extends BaseController
     public $page_js = [
                         '/js/editormd/editormd.min.js',
                         '/js/layer/layer/layer.js',
-                        '/js/validate/article.js?sf'
+                        '/js/validate/article.js'
                       ];
 
     public $page_css = [
@@ -137,13 +137,16 @@ class ArticleController extends BaseController
             $article_id = $this->request->get('article_id');
             $article_service = new ArticleService();
 
-            //增加页面浏览量
-            $article_service->incrViewNumber($article_id);
-
             //获取文章数据
             $article_detail = $article_service->getArticleDetail($article_id);
+            if($article_detail['status'] == 0 && $this->is_login === false) {
+                throw new \Exception('请先登录');
+            }
             $article_detail['tag_list'] = explode(',', $article_detail['tag']);
             $this->title = $this->title . '-' . $article_detail['title'];
+
+            //增加页面浏览量
+            $article_service->incrViewNumber($article_id);
 
             //base64反解出来
             $article_detail['htmlcontent'] = base64_decode($article_detail['htmlcontent']);

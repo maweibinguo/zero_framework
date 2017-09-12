@@ -56,6 +56,9 @@ class Article
         $validation->add('headimage', new PresenceOf([   'message' => '请上传文章头图' ]));
         $validation->setFilters('headimage', 'trim');
 
+        //是否推荐
+        $validation->add('ishot', new PresenceOf([   'message' => '请选择是否是今日推荐' ]));
+        $validation->setFilters('ishot', 'trim');
         return $validation;
     }
 }

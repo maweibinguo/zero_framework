@@ -21,7 +21,7 @@ class ArticleCategoryModel extends BaseModel
 
         switch($article_detail['status']) {
             case ArticleModel::ARTICLE_STATUS_DRAFT:
-                if($is_same == true) {
+                if($is_same === true) {
                     //do nothing 
                 } else {
                     $this->deleteArticleFromCategory($article_detail['article_id'], $old_article_detail['category']);

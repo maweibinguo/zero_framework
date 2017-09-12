@@ -3,6 +3,7 @@
 *.swp
 product/*
 develop/*
+develop
 logs/*
 *.htaccess
 runtime/*
