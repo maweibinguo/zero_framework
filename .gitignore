@@ -1,10 +1,9 @@
 /composer.json
 /attach/*
 *.swp
-product/*
-develop/*
+product
 develop
-logs/*
 *.htaccess
-runtime/*
+view_compile
+logs
 config.php
