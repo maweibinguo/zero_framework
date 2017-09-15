@@ -2,14 +2,14 @@
     <div class="fixed">
       <div class="widget widget-tabs">
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#notice" aria-controls="notice" role="tab" data-toggle="tab">网站公告</a></li>
+          <!--li role="presentation" class="active"><a href="#notice" aria-controls="notice" role="tab" data-toggle="tab">网站公告</a></li-->
           <?php if($is_login === false) :?>
           <li role="presentation"><a href="#centre" aria-controls="centre" role="tab" data-toggle="tab">会员中心</a></li>
           <?php endif;?>
-          <li role="presentation"><a href="#contact" aria-controls="contact" role="tab" data-toggle="tab">联系站长</a></li>
+          <li role="presentation" class="active"><a href="#contact" aria-controls="contact" role="tab" data-toggle="tab">联系站长</a></li>
         </ul>
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane notice active" id="notice">
+          <!--div role="tabpanel" class="tab-pane notice active" id="notice">
             <ul>
               <li>
                 <time datetime="2016-01-04">01-04</time>
@@ -21,12 +21,12 @@
                 <time datetime="2016-01-04">01-04</time>
                 <a target="_blank" href="">在这个小工具中最多可以调用五条</a></li>
             </ul>
-          </div>
+          </div-->
           <div role="tabpanel" class="tab-pane centre" id="centre">
             <h4>需要登录才能进入会员中心</h4>
-                <p> <a data-toggle="modal" data-target="#loginModal" class="btn btn-primary" draggable="false">立即登录</a> <a href="javascript:;" class="btn btn-default" draggable="false">现在注册</a> </p>
+                <p> <a data-toggle="modal" data-target="#loginModal" class="btn btn-primary" draggable="false">立即登录</a> <!--a href="javascript:;" class="btn btn-default" draggable="false">现在注册</a--> </p>
           </div>
-          <div role="tabpanel" class="tab-pane contact" id="contact">
+          <div role="tabpanel" class="tab-pane contact active" id="contact">
             <h2>Email:<br />
               <a href="mailto:maweibinguo@163.com" data-toggle="tooltip" data-placement="bottom" title="maweibinguo@163.com">maweibinguo@163.com</a></h2>
           </div>

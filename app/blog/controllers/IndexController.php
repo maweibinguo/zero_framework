@@ -60,6 +60,9 @@ class IndexController extends BaseController
                $article_list[$key] = $article_detail;
            }
 
+           //获取轮播图
+           $picture_list = file_get_contents('http://blog.insisting.top/api/picture');
+           $picture_list = json_decode($picture_list, true);
 
            //获取今日推荐
            $hot_article_detail = $article_service->getHotArticle();
@@ -86,6 +89,7 @@ class IndexController extends BaseController
            $this->view->setVar('motto', $motto);
            $this->view->setVar('date', $date);
            $this->view->setVar('hot_article_detail', $hot_article_detail);
+           $this->view->setVar('picture_list', $picture_list);
        } catch (\Exception $e) {
             $error_message = $e->getMessage();
             Log::getInstance()->info($error_message);

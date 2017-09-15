@@ -6,20 +6,16 @@
   </div>
   <div id="focusslide" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
-      <li data-target="#focusslide" data-slide-to="0" class="active"></li>
-      <li data-target="#focusslide" data-slide-to="1"></li>
-      <li data-target="#focusslide" data-slide-to="2"></li>
+      <?php foreach($picture_list as $picture_key => $picture_item) { ?>
+      <li data-target="#focusslide" data-slide-to="<?php echo $picture_key;?>" <?php if($picture_key==0) { echo 'class="active"'; }?> ></li>
+      <?php } ?>
     </ol>
     <div class="carousel-inner" role="listbox">
-      <div class="item active"> <a href="" target="_blank"><img src="/images/banner/banner_01.jpg" alt="" class="img-responsive"></a> 
+      <?php foreach($picture_list as $picture_key => $picture_item) { ?>
+      <div class="item <?php if($picture_key == 0) {echo 'active';} ?> "> <a href="<?php echo $picture_item['targeturl']; ?>" target="_blank"><img src="<?php echo $picture_item['headimage']; ?>" alt="" class="img-responsive"></a> 
         <!--<div class="carousel-caption"> </div>--> 
       </div>
-      <div class="item"> <a href="" target="_blank"><img src="/images/banner/banner_02.jpg" alt="" class="img-responsive"></a> 
-        <!--<div class="carousel-caption"> </div>--> 
-      </div>
-      <div class="item"> <a href="" target="_blank"><img src="/images/banner/banner_03.jpg" alt="" class="img-responsive"></a> 
-        <!--<div class="carousel-caption"> </div>--> 
-      </div>
+      <?php } ?>
     </div>
     <a class="left carousel-control" href="#focusslide" role="button" data-slide="prev" rel="nofollow"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">上一个</span> </a> <a class="right carousel-control" href="#focusslide" role="button" data-slide="next" rel="nofollow"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span class="sr-only">下一个</span> </a> </div>
   <article class="excerpt-minic excerpt-minic-index">

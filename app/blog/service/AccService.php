@@ -30,4 +30,8 @@ class AccService extends Components
         $login_session_name = $this->config->get('login_session_name');
         $this->session->set($login_session_name, $user_data_encrypt);
     }
+
+    /**
+     * 统计用户的数量
+     */
 }

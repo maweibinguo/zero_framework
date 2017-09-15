@@ -37,7 +37,7 @@ class AccController extends BaseController
     public function loginAction()
     {
         try{
-            $post_data = $this->request->get();
+            $post_data = $this->request->getPost();
             $user_validator = new UserValidator();
             $add_user_validator = $user_validator->getAddValidator();
             $messages_list = $add_user_validator->validate($post_data);
@@ -61,7 +61,8 @@ class AccController extends BaseController
      */
     public function logoutAction()
     {
-       $this->session->destroy();
+       $remove_name = $this->config->get('login_session_name');
+       $this->session->remove($remove_name);
        return $this->response->redirect('/index/index');
     }
 }

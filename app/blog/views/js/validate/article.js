@@ -121,5 +121,16 @@ $(function() {
         //时序图
         sequenceDiagram : true,
         editorTheme : editormd.editorThemes['ambiance'],
+
+        //全屏打开
+        onfullscreen : function() {
+            $('.header').hide();
+            $('.tijiao').hide();
+        },
+        //全屏关闭
+        onfullscreenExit:function() {
+            $('.header').show();
+            $('.tijiao').show(); 
+        }
     });
 });

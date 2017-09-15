@@ -75,7 +75,7 @@
       </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group tijiao">
     <div class="col-sm-3 pull-left">
         <button type="button" class="btn btn-primary btn-sm submit" status=0 >保存为草稿</button>
     </div>

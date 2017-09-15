@@ -42,7 +42,7 @@ class BaseController extends Controller
                             'js/jquery.ias.js',
                             'js/scripts.js',
                             'js/layer/layer/layer.js',
-                            'js/validate/user.js?ff'
+                            'js/validate/user.js'
                         ];
 
     /**
