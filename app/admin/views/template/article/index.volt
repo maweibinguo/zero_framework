@@ -37,9 +37,9 @@
                                                 <td><?php echo $article_item['add_time']; ?></td>
                                                 <td>
                                                     <?php if($article_item['status'] == 0) {?>
-                                                        <span id="show">展示</span>
+                                                        <span id="show" style="cursor:pointer;" article_id="<?php echo $article_item['article_id']; ?>">展示</span>
                                                     <?php } else {?>
-                                                        <span id="hidden">隐藏</span>
+                                                        <span id="hidden" style="cursor:pointer;" article_id="<?php echo $article_item['article_id']; ?>" >隐藏</span>
                                                     <?php } ?>
                                                 </td>
                                             </tr>

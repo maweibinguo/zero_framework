@@ -7,6 +7,13 @@ use core\base\Log;
 
 class ArticleController extends BaseController
 {
+    /**
+     * 页面的js
+     */
+    public $page_js = [
+                        '/js/layer/layer/layer.js',
+                        '/js/validate/article.js'
+                      ];
 
     /**
      * 获取文章列表
@@ -34,11 +41,7 @@ class ArticleController extends BaseController
                $condition['category'] = $category;
            }
            $status = $this->request->get('status');
-           if( isset($status) && $status == 0 ) {
-               $is_login = $this->isLogin();
-               if($is_login === false) {
-                    throw new \Exception('请先登录');     
-               }
+           if( isset($status) ) {
                $condition['status'] = $status;
            }
 
@@ -75,7 +78,51 @@ class ArticleController extends BaseController
         
     }
 
+    /**
+     * 隐藏文章
+     */
+    public function hiddenAction()
+    {
+        try{
+            if($this->request->isPost() === false) {
+                $this->responseFailed('请求方式不正确');
+            }
+            $article_id = $this->request->get('article_id');
+            if(empty($article_id)) {
+                $this->responseFailed('文章编号不正确');
+            }
+            $article_service = new ArticleService();
+            $article_service->hiddenArticle($article_id);
+            $this->responseSuccess("操作成功");
+        } catch (\Exception $e) {
+            $error_message = $e->getMessage();
+            Log::getInstance()->info($error_message);
+            $this->responseFailed("操作失败");
+        }
+    }
 
+    /**
+     * 展示文章
+     */
+    public function showAction()
+    {
+        try{
+            if($this->request->isPost() === false) {
+                $this->responseFailed('请求方式不正确');
+            }
+            $article_id = $this->request->get('article_id');
+            if(empty($article_id)) {
+                $this->responseFailed('文章编号不正确');
+            }
+            $article_service = new ArticleService();
+            $article_service->showArticle($article_id);
+            $this->responseSuccess("操作成功");
+        } catch (\Exception $e) {
+            $error_message = $e->getMessage();
+            Log::getInstance()->info($error_message);
+            $this->responseFailed("操作失败");
+        }
+    
+    }
 
-    /****************************************** 由于文章的相关功能在前台几乎都能搞定这里功能暂不开发*******************************/
 }

@@ -17,7 +17,7 @@ class IndexController extends BaseController
            /* 获取分页数 */
            $now_number = $this->request->get('now_number'); 
            $now_number = (int)$now_number > 0 ? $now_number : 1;
-           $page_size = 5;
+           $page_size = 2;
            $start = ($now_number - 1) * $page_size;
            $end = $now_number * $page_size - 1;
            $condition['start'] = $start;
@@ -40,6 +40,8 @@ class IndexController extends BaseController
                     throw new \Exception('请先登录');     
                }
                $condition['status'] = $status;
+           } else {
+               $condition['status'] = 1;
            }
 
            /* 获取分页总数 */
@@ -56,6 +58,7 @@ class IndexController extends BaseController
                $htmlcontent = mb_substr($htmlcontent, 0, 100);
                $article_detail['htmlcontent'] = $htmlcontent;
                unset($article_detail['mdcontent']);
+               $article_detail['tag_list'] = explode(',', $article_detail['tag']);
                $article_detail['add_time'] = date('Y-m-d H:i:s', $article_detail['add_time']);
                $article_list[$key] = $article_detail;
            }

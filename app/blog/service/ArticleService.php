@@ -143,15 +143,17 @@ class ArticleService extends Components
             $article_category_model = new ArticleCategoryModel();
             $return_data = $article_category_model->getArticleListByCategory($condition);
             return $return_data;
-        } elseif(isset($condition['status'])) {
+        } elseif(isset($condition['status']) && $condition['status'] == ArticleModel::ARTICLE_STATUS_DRAFT) {
             $article_model = new ArticleModel();
             $return_data = $article_model->getDraftArticleList($condition);
             return $return_data;
+        } elseif(isset($condition['status']) && $condition['status'] == ArticleModel::ARTICLE_STATUS_PUBLIC) {
+            $article_model = new ArticleModel();
+            $return_data = $article_model->getCommonArticleList($condition);
+            return $return_data;
         } else {
-            $article_list = $this->redis->zRevRange(ArticleModel::ARTICLE_COMMON_LIST, $condition['start'], $condition['end']);
-            $article_number = $this->redis->zCard(ArticleModel::ARTICLE_COMMON_LIST);
-            $return_data['article_number'] = $article_number;
-            $return_data['article_list'] = $article_list;
+            $article_model = new ArticleModel();
+            $return_data = $article_model->getAllArticleList($condition);
             return $return_data;
         }
     }

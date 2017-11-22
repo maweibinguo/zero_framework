@@ -104,7 +104,7 @@ class BaseController extends Controller
         if($this->request->isPost()) {
             $need_check_list = $this->config->get('check_resubmit');            
             if(isset($need_check_list[$controller_name]) && 
-                                                         in_array($action_name, $access_controll_list[$controller_name])) {
+                                                         in_array($action_name, $need_check_list[$controller_name])) {
                 $post_data = $this->request->getPost();
                 $name = $this->resubmition->getName();
                 $unique_value = $post_data[$name];

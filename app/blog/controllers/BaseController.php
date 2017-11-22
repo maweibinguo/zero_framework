@@ -41,8 +41,8 @@ class BaseController extends Controller
                             'js/bootstrap.min.js',
                             'js/jquery.ias.js',
                             'js/scripts.js',
-                            'js/layer/layer/layer.js',
-                            'js/validate/user.js'
+                            'js/validate/user.js',
+                            'js/layer/layer/layer.js'
                         ];
 
     /**
@@ -51,7 +51,7 @@ class BaseController extends Controller
     public $common_css = [
                             'css/bootstrap.min.css',
                             'css/nprogress.css',
-                            'css/style.css?Sdf',
+                            'css/style.css',
                             'css/font-awesome.min.css'
                          ];
 
@@ -95,7 +95,7 @@ class BaseController extends Controller
         if($this->request->isPost()) {
             $need_check_list = $this->config->get('check_resubmit');            
             if(isset($need_check_list[$controller_name]) && 
-                                                         in_array($action_name, $access_controll_list[$controller_name])) {
+                                                         in_array($action_name, $need_check_list[$controller_name])) {
                 $post_data = $this->request->getPost();
                 $name = $this->resubmition->getName();
                 $unique_value = $post_data[$name];

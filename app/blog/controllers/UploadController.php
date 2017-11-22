@@ -40,7 +40,7 @@ class UploadController extends BaseController
 
                     $file_path = $attach->getFilePath('blog');
                     $file_name = $attach->getNewFileName($file->getName());
-                    $file_full_path = $file_path . $file_name;
+                    $file_full_path = $file_path . DS  . $file_name;
                     if($file->moveTo($file_full_path) === true) {
                         $return_data['message'] = '上传成功';
                         $return_data['success'] = 1;

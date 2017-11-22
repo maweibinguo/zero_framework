@@ -86,13 +86,13 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.editormd-user-unselect {
+/*.editormd-user-unselect {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-}
+}*/
 
 .editormd-toolbar {
   width: 100%;
@@ -109,11 +109,11 @@
 .editormd-toolbar-container {
   padding: 0 8px;
   min-height: 35px;
-  -webkit-user-select: none;
+  /*-webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
-  user-select: none;
+  user-select: none;*/
 }
 
 .editormd-menu {
@@ -3368,10 +3368,10 @@
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-user-select: none;
+  /*-webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none;
+  user-select: none;*/
 }
 
 .markdown-body .octicon-link:before {

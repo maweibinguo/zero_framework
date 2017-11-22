@@ -19,6 +19,9 @@ class ArticleModel extends BaseModel
     /* 草稿文章列表的keyname */
     const ARTICLE_DRAFT_LIST = 'article:draft:list';
 
+    /* 所有状态的文章 */
+    const ARTICLE_ALL_LIST = 'article:all:list';
+
     /* 热门文章的keyname */
     const ARTICLE_HOT = 'article:hot';
 
@@ -59,6 +62,8 @@ class ArticleModel extends BaseModel
                 break;
         }
 
+        //向所有文章集合中添加元素
+        static::$redis->zAdd(static::ARTICLE_ALL_LIST, $article_detail['add_time'], $article_key_name);
         return $article_key_name;
     }
 
@@ -164,6 +169,44 @@ class ArticleModel extends BaseModel
         $return_data['article_number'] = $article_number;
 
         $article_list = static::$redis->zRevRange(  static::ARTICLE_DRAFT_LIST, 
+                                                    $condition['start'], 
+                                                    $condition['end']
+                                                      );
+        $return_data['article_list'] = $article_list;
+
+        return $return_data;
+    }
+
+    /**
+     * 获取正常文章列表
+     */
+    public function getCommonArticleList($condition)
+    {
+        $return_data = [];
+
+        $article_number = static::$redis->zCard(static::ARTICLE_COMMON_LIST);
+        $return_data['article_number'] = $article_number;
+
+        $article_list = static::$redis->zRevRange(  static::ARTICLE_COMMON_LIST, 
+                                                    $condition['start'], 
+                                                    $condition['end']
+                                                      );
+        $return_data['article_list'] = $article_list;
+
+        return $return_data;
+    }
+
+    /**
+     * 获取所有文章列表
+     */
+    public function getAllArticleList($condition)
+    {
+        $return_data = [];
+
+        $article_number = static::$redis->zCard(static::ARTICLE_ALL_LIST);
+        $return_data['article_number'] = $article_number;
+
+        $article_list = static::$redis->zRevRange(  static::ARTICLE_ALL_LIST, 
                                                     $condition['start'], 
                                                     $condition['end']
                                                       );

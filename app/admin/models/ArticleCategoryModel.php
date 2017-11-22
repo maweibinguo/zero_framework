@@ -2,9 +2,9 @@
 /**
  * 文章类别model
  */
-namespace app\blog\models;
+namespace app\admin\models;
 
-use app\blog\models\ArticleModel;
+use app\admin\models\ArticleModel;
 use core\base\Log;
 
 class ArticleCategoryModel extends BaseModel

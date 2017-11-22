@@ -113,6 +113,7 @@ $(function() {
         imageUpload : true,
         imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
         imageUploadURL : "/upload/index",
+        emoji : true,
         saveHTMLToTextarea:true,
         //tex
         text:true,
@@ -126,11 +127,13 @@ $(function() {
         onfullscreen : function() {
             $('.header').hide();
             $('.tijiao').hide();
+            $('.footer').hide();
         },
         //全屏关闭
         onfullscreenExit:function() {
             $('.header').show();
             $('.tijiao').show(); 
+            $('.footer').show(); 
         }
     });
 });

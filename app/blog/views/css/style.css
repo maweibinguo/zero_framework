@@ -829,7 +829,7 @@ color:#FFF;
 }
 .article-content img {
 	margin: 5px auto;
-	display: block;
+	/*display: block;*/
 	max-width: 100%;
 	height: auto;
 }
@@ -845,7 +845,6 @@ color:#FFF;
 	transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
 }
 .article-content p {
-	text-indent: 30px;
 	margin-bottom: 18px;
 	word-wrap: break-word;
 }

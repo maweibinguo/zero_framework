@@ -80,9 +80,6 @@
                         <li class="dropdown profile">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="caret"></span></a>
                             <ul class="dropdown-menu animated fadeInDown">
-                                <li class="profile-img">
-                                    <img src="/images/profile/picjumbo.com_HNCK4153_resize.jpg" class="profile-img">
-                                </li>
                                 <li>
                                     <div class="profile-info">
                                         <h4 class="username"><?php echo $user_data['user_name'];?></h4>

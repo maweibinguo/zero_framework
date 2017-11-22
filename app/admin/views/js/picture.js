@@ -6,7 +6,7 @@ $('.submit').on('click',function(){
                     function(index){
                         var picturename  = $.trim($('#picturename').val());
                         var targeturl = $.trim($('#targeturl').val());
-                        var status = $('input[name="status"]').val();
+                        var status = $('input[name="status"]:checked').val();
                         var headimage = $.trim($('#headimage').val());
                         var picture_id = $('#picture_id').val();
                         if(picturename== '') {

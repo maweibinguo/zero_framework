@@ -2,7 +2,7 @@
 /**
  * 文章标签model
  */
-namespace app\blog\models;
+namespace app\admin\models;
 
 class TagModel extends BaseModel
 {

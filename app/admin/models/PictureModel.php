@@ -77,8 +77,8 @@ class PictureModel extends BaseModel
             case static::PICTURE_STATUS_COMMON:
                 if($is_same === false) {
                     $result = static::$redis->multi()
-                                            ->sRem(static::PICTURE_DISABLED, $picutre_item['picture_id'])
-                                            ->sAdd(static::PICTURE_COMMON, $picutre_item['picture_id'])
+                                            ->zRem(static::PICTURE_DISABLED, $picutre_item['picture_id'])
+                                            ->zAdd(static::PICTURE_COMMON, time(), $picutre_item['picture_id'])
                                             ->exec();
                     if(empty($result)) {
                         $error_message = Log::getErrorMessage('修改轮播图失败', __CLASS__, __METHOD__, __LINE__);
@@ -89,8 +89,8 @@ class PictureModel extends BaseModel
             case static::PICTURE_STATUS_DISABLED:
                 if($is_same === false) {
                     $result = static::$redis->multi()
-                                            ->sRem(static::PICTURE_COMMON, $picutre_item['picture_id'])
-                                            ->sAdd(static::PICTURE_DISABLED, $picutre_item['picture_id'])
+                                            ->zRem(static::PICTURE_COMMON, $picutre_item['picture_id'])
+                                            ->zAdd(static::PICTURE_DISABLED, time(), $picutre_item['picture_id'])
                                             ->exec();
                     if(empty($result)) {
                         $error_message = Log::getErrorMessage('修改轮播图失败', __CLASS__, __METHOD__, __LINE__);

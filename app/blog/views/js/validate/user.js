@@ -29,6 +29,9 @@ $(document).ready(function(){
                     window.location.href="/index/index"
                 } else {
                     layer.alert(data.message); 
+                    if(data.message == '验证码不正确') {
+                        $('.img_captcha').click(); 
+                    }
                 }
             }
         })

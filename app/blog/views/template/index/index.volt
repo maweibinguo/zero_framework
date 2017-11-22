@@ -7,6 +7,13 @@
     <p class="meta">
       <time class="time"><i class="glyphicon glyphicon-time"></i><?php echo $article_detail['add_time'];?></time>
       <span class="views"><i class="glyphicon glyphicon-eye-open"></i> 共<?php echo $article_detail['article_view_statistics'];?>人浏览</span> 
+
+      <span class="glyphicon glyphicon-tag"></span>标签:
+      <?php if(isset($article_detail['tag_list'])) { ?>
+            <?php foreach($article_detail['tag_list'] as $key_name => $tag_name) {?>
+                <a href="/index/index/tag=<?php echo $tag_name; ?>"><?php echo $tag_name;?></a>
+            <?php } ?>
+      <?php } ?>
       <!--a class="comment" href="article.html#comment"><!--i class="glyphicon glyphicon-comment"></i> 0个不明物体</a-->
     </p>
     <p class="note">
