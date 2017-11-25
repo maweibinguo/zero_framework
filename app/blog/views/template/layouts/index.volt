@@ -34,15 +34,13 @@
     <h3>最新发布</h3>
     <div class="more"></div>
   </div>
-    <?php 
-        echo $this->getContent();
-    ?>
-  <nav class="pagination" style="display: none;">
-    <ul>
-      <li class="next-page"><a  href="/index/index?now_number=<?php echo $condition['now_number'] + 1;?>">下一页</a></li>
-      <li><span>共 <span id='total_page_number'><?php echo $condition['total_page_number'];?></span> 页</span></li>
-    </ul>
-  </nav>
+  <div class="article_content" article_status='<?php echo $condition['status'];?>'>
+      <div class="article_list">
+            <?php 
+                echo $this->getContent();
+            ?>
+      </div>
+  </div>
 </div>
 </div>
 <?php

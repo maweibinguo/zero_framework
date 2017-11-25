@@ -39,10 +39,9 @@ class BaseController extends Controller
                             'js/nprogress.js',
                             'js/jquery.lazyload.min.js',
                             'js/bootstrap.min.js',
-                            'js/jquery.ias.js',
-                            'js/scripts.js',
                             'js/validate/user.js',
-                            'js/layer/layer/layer.js'
+                            'js/layer/layer/layer.js',
+                            'js/scripts.js?df=df',
                         ];
 
     /**
@@ -205,12 +204,14 @@ class BaseController extends Controller
     /**
      * ajax成功响应
      */
-    public function responseSuccess($message = '', $data = [])
+    public function responseSuccess($message = '', $data = [], $is_check = true)
     {
-        $data['token_name'] = $this->security->getTokenKey();
-        $data['token_value'] = $this->security->getToken();
-        $data['resubmit_name'] = $this->resubmition->getName();
-        $data['resubmit_value'] = $this->resubmition->getUniqueValue();
+        if($is_check === true) {
+            $data['token_name'] = $this->security->getTokenKey();
+            $data['token_value'] = $this->security->getToken();
+            $data['resubmit_name'] = $this->resubmition->getName();
+            $data['resubmit_value'] = $this->resubmition->getUniqueValue();
+        }
         $return_data = [
                             'status'  => 'success',
                             'message' => $message,
@@ -222,12 +223,14 @@ class BaseController extends Controller
     /**
      * ajax失败相应
      */
-    public function responseFailed($message = '', $data = [])
+    public function responseFailed($message = '', $data = [], $is_check = true)
     {
-        $data['token_name'] = $this->security->getTokenKey();
-        $data['token_value'] = $this->security->getToken();
-        $data['resubmit_name'] = $this->resubmition->getName();
-        $data['resubmit_value'] = $this->resubmition->getUniqueValue();
+        if($is_check === true) {
+            $data['token_name'] = $this->security->getTokenKey();
+            $data['token_value'] = $this->security->getToken();
+            $data['resubmit_name'] = $this->resubmition->getName();
+            $data['resubmit_value'] = $this->resubmition->getUniqueValue();
+        }
         $return_data = [
                             'status'  => 'failed',
                             'message' => $message,

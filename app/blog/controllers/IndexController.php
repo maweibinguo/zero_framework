@@ -8,6 +8,13 @@ use Gregwar\Captcha\CaptchaBuilder;
 
 class IndexController extends BaseController
 {
+    public $page_js = [
+                       'js/dropload.min.js',
+                        ];
+
+    public $page_css = [
+                       'css/dropload.css',
+                        ];
     /**
      * 加载页面
      */
@@ -15,8 +22,7 @@ class IndexController extends BaseController
     {
        try{
            /* 获取分页数 */
-           $now_number = $this->request->get('now_number'); 
-           $now_number = (int)$now_number > 0 ? $now_number : 1;
+           $now_number = 1;
            $page_size = 2;
            $start = ($now_number - 1) * $page_size;
            $end = $now_number * $page_size - 1;
@@ -98,6 +104,70 @@ class IndexController extends BaseController
             Log::getInstance()->info($error_message);
             $this->flashSession->error("请先登录"); 
             return $this->response->redirect('error/notFound');
+       }
+    }
+
+    /**
+     * 分页获取数据
+     */
+    public function ajaxAction()
+    {
+       try{
+           /* 获取分页数 */
+           $now_number = $this->request->get('now_number'); 
+           $now_number = (int)$now_number > 0 ? $now_number : 1;
+           $page_size = 2;
+           $start = ($now_number - 1) * $page_size;
+           $end = $now_number * $page_size - 1;
+           $condition['start'] = $start;
+           $condition['end'] = $end;
+           $condition['now_number'] = $now_number;
+
+           /* 搜索条件 */
+           $tag = $this->request->get('tag');
+           if( !empty($tag) ) {
+               $condition['tag'] = $tag; 
+           }
+           $category = $this->request->get('category');
+           if( !empty($category) ) {
+               $condition['category'] = $category;
+           }
+           $status = $this->request->get('status');
+           if( isset($status) && $status == 0 ) {
+               $is_login = $this->isLogin();
+               if($is_login === false) {
+                    throw new \Exception('请先登录');     
+               }
+               $condition['status'] = $status;
+           } else {
+               $condition['status'] = 1;
+           }
+
+           /* 获取分页总数 */
+           $article_service = new ArticleService();
+           $data_list = $article_service->getArticleList($condition);
+           $total_page_number = ceil($data_list['article_number'] / $page_size);
+           $condition['total_page_number'] = $total_page_number;
+
+           /* 获取文章列表 */
+           $article_list = $data_list['article_list'];
+           foreach($article_list as $key => $article_id) {
+               $article_detail = $article_service->getArticleDetail($article_id);
+               $htmlcontent = strip_tags(base64_decode($article_detail['htmlcontent']));
+               $htmlcontent = mb_substr($htmlcontent, 0, 100);
+               $article_detail['htmlcontent'] = $htmlcontent;
+               unset($article_detail['mdcontent']);
+               $article_detail['tag_list'] = explode(',', $article_detail['tag']);
+               $article_detail['add_time'] = date('Y-m-d H:i:s', $article_detail['add_time']);
+               $article_list[$key] = $article_detail;
+           }
+
+            $this->responseSuccess('', $article_list, $is_check = false);
+           /* 想页面分配数据 */
+       } catch (\Exception $e) {
+            $error_message = $e->getMessage();
+            Log::getInstance()->info($error_message);
+            $this->responseFailed('获取文章列表失败', [], $is_check = false);
        }
     }
 }

@@ -48,7 +48,7 @@ function getCookie(name) {
 }
  
 //导航智能定位
-$.fn.navSmartFloat = function () {
+/* $.fn.navSmartFloat = function () {
     var position = function (element) {
         var top = element.position().top,
             pos = element.css("position");
@@ -78,10 +78,10 @@ $.fn.navSmartFloat = function () {
     return $(this).each(function () {
         position($(this));
     });
-};
+};*/
  
 //启用导航定位
-$("#navbar").navSmartFloat();
+/* $("#navbar").navSmartFloat();*/
  
 //返回顶部按钮
 $("#gotop").hide();
@@ -116,28 +116,6 @@ $(".single .content img").lazyload({
 //启用工具提示
 $('[data-toggle="tooltip"]').tooltip();
  
-//无限滚动反翻页
-var ias = jQuery.ias({
-	container : '.content',
-	item: '.excerpt',
-	pagination: '.pagination',
-	next: '.next-page a',
-	trigger: '查看更多',
-	loader: '<div class="pagination-loading"><img src="/images/loading.gif" /></div>',
-    triggerPageThreshold:3,
-    beforePageChange:function(scrollOffset, nextPageUrl){
-        console.log(scrollOffset, nextPageUrl);
-    },
-	onRenderComplete: function() {
-		$('.excerpt .thumb').lazyload({
-			placeholder: '/images/occupying.png',
-			threshold: 400
-		});
-		$('.excerpt img').attr('draggable','false');
-		$('.excerpt a').attr('draggable','false');
-	},
-});
- 
 //鼠标滚动超出侧边栏高度绝对定位
 $(window).scroll(function () {
     var sidebar = $('.sidebar');
@@ -153,14 +131,6 @@ $(window).scroll(function () {
         $('.fixed').removeAttr("style");
     }
 });
-
-/*禁止键盘操作*/
-/*document.onkeydown=function(event){
-	var e = event || window.event || arguments.callee.caller.arguments[0];
-	if((e.keyCode === 123) || (e.ctrlKey) || (e.ctrlKey) && (e.keyCode === 85)){
-		return false;
-	}
-}; */
 
 /*文章评论*/
 $(function(){
