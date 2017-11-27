@@ -9,7 +9,7 @@ use Gregwar\Captcha\CaptchaBuilder;
 class IndexController extends BaseController
 {
     public $page_js = [
-                       'js/dropload.min.js',
+                       'js/dropload.min.js?df=df',
                         ];
 
     public $page_css = [
@@ -23,7 +23,7 @@ class IndexController extends BaseController
        try{
            /* 获取分页数 */
            $now_number = 1;
-           $page_size = 2;
+           $page_size = 5;
            $start = ($now_number - 1) * $page_size;
            $end = $now_number * $page_size - 1;
            $condition['start'] = $start;
@@ -116,7 +116,7 @@ class IndexController extends BaseController
            /* 获取分页数 */
            $now_number = $this->request->get('now_number'); 
            $now_number = (int)$now_number > 0 ? $now_number : 1;
-           $page_size = 2;
+           $page_size = 5;
            $start = ($now_number - 1) * $page_size;
            $end = $now_number * $page_size - 1;
            $condition['start'] = $start;

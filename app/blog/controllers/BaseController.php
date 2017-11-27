@@ -41,7 +41,7 @@ class BaseController extends Controller
                             'js/bootstrap.min.js',
                             'js/validate/user.js',
                             'js/layer/layer/layer.js',
-                            'js/scripts.js?df=df',
+                            'js/scripts.js',
                         ];
 
     /**

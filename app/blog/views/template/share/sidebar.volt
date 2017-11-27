@@ -57,8 +57,8 @@
                     <?php if(isset($tag_list) && is_array($tag_list)) { ?>
                         <?php foreach($tag_list as $tag_item) { ?>
                             <tr>
-                            <?php foreach($tag_item as $tag_name) { ?>
-                                <td><a href="/index/index?tag=<?php echo $tag_name;?>"><?php echo $tag_name;?></a></td>
+                            <?php foreach($tag_item as $item) { ?>
+                                <td><a href="/index/index?tag=<?php echo $item['tag_name'];?>"><?php echo $item['tag_name'];?>(<?php echo $item['tag_score']; ?>)</a></td>
                             <?php } ?>
                             </tr>
                         <?php } ?>

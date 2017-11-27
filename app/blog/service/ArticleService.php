@@ -181,9 +181,14 @@ class ArticleService extends Components
         $article_tag_model = new ArticleTagModel(); 
         $tag_list = $article_tag_model->getTagList();
         if(is_array($tag_list)) {
-            foreach($tag_list as $tag_key => $tag_name) {
-                $row_number = (int) ( ($tag_key + 1) / 3 );
-                $tag_list_format[$row_number][] = $tag_name;
+            $row_number = 0;
+            $count = 0;
+            foreach($tag_list as $tag_name => $tag_score) {
+                if( ($count % 3) == 0) {
+                    $row_number++;
+                }
+                $tag_list_format[$row_number][] = [ 'tag_name' => $tag_name, 'tag_score' => $tag_score ];
+                $count++;
             }
         }
         return $tag_list_format;

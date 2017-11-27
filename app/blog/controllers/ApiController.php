@@ -12,10 +12,13 @@ class ApiController extends BaseController
     public function captchaAction()
     {
         header('Content-type: image/jpeg');
-        $builder = new CaptchaBuilder();
+        $code_item = array_merge(range(0,9), range('a', 'z'));
+        shuffle($code_item);
+        $code = implode('', array_slice($code_item, 0, 4));
+        $builder = new CaptchaBuilder($code);
         $this->session->set('captcha', $builder->getPhrase());
         $builder->setBackgroundColor(255 , 255 , 255);
-        $builder->build(130, 40, null);    
+        $builder->build(135, 45, null);    
         $builder->output();
     }
 }

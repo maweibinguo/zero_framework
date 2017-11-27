@@ -79,7 +79,7 @@ class ArticleCategoryModel extends BaseModel
 
         $article_list = static::$redis->zRevRange(  $key_name, 
                                                     $condition['start'], 
-                                                    $condition['page_size']
+                                                    $condition['end']
                                                       );
         $return_data['article_list'] = $article_list;
 
