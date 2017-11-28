@@ -1116,6 +1116,7 @@ color:#FFF;
 }
 .comment-content {
 	border-bottom: #EEE 1px solid;
+    position:relative;
 }
 .comment-content:hover {
 	opacity: .7;

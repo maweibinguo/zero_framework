@@ -140,6 +140,7 @@ $(function(){
 		var promptBox = $('.comment-prompt');
 		var promptText = $('.comment-prompt-text');
 		var articleid = $('.articleid').val();
+        var captcha = $.trim($('.captcha_comment').val());
 		promptBox.fadeIn(400);
 		if(commentContent.val() === ''){
 			promptText.text('请留下您的评论');
@@ -148,23 +149,38 @@ $(function(){
 		commentButton.attr('disabled',true);
 		commentButton.addClass('disabled');
 		promptText.text('正在提交...');
+
+        if(captcha == '') {
+            layer.alert('请填写验证码');
+            return false;
+        }
+
 		$.ajax({   
 			type:"POST",
-			url:"test.php?id=" + articleid,
-			//url:"/Article/comment/id/" + articleid,   
-			data:"commentContent=" + replace_em(commentContent.val()),   
+			url:"/article/addcomment",
+            dataType:'json',
+			data:{"article_comment":replace_em(commentContent.val()), 'article_id':articleid, 'captcha':captcha},
 			cache:false, //不缓存此页面  
-			success:function(data){
-				alert(data);
-				promptText.text('评论成功!');
+			success:function(response){
+                var data = response.data;
 			    commentContent.val(null);
 				$(".commentlist").fadeIn(300);
-				/*$(".commentlist").append();*/
 				commentButton.attr('disabled',false);
 				commentButton.removeClass('disabled');
+            
+                //添加评论
+                var li_str = '<li class="comment-content"><span class="comment-f">'+data.id_num+'</span>\
+                                <div class="comment-avatar"><img class="avatar" src="/images/icon/icon.png" alt="" /></div>\
+                                <div class="comment-main">\
+                                  <p>来自用户<span class="address">zero</span>(<span class="time">'+data.add_time+'</span>)<br />\
+                                    <span class="content">'+ data.article_comment +'</span>\
+                                  </p>\
+                                </div>\
+                              </li>';
+                $('.commentlist').append(li_str);
+				promptText.text('评论成功!');
 			}
 		});
-		/*$(".commentlist").append(replace_em(commentContent.val()));*/
 		promptBox.fadeOut(100);
 		return false;
 	});
@@ -186,3 +202,12 @@ try {
         console.log("\nPOWERED BY WY ALL RIGHTS RESERVED");
     }
 } catch (e) {};
+
+
+//验证码
+$('.img_captcha').click(function(){
+    search = window.location.search;
+    var url = $(this).attr('src').replace(/\?.*/, '');
+    url = url + '?' +Math.random();
+    $(this).attr('src', url);
+})

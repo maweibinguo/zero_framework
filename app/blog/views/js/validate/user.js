@@ -38,9 +38,3 @@ $(document).ready(function(){
         return false;
     })  
 });
-$('.img_captcha').click(function(){
-    search = window.location.search;
-    var url = $(this).attr('src').replace(/\?.*/, '');
-    url = url + '?' +Math.random();
-    $(this).attr('src', url);
-})

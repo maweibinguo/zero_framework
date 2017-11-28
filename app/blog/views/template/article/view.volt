@@ -42,31 +42,50 @@
     </div>
   </div>-->
 
-  <!--div id="respond">
-    <form action="" method="post" id="comment-form">
+  <div id="respond">
       <div class="comment">
-        <div class="comment-title"><img class="avatar" src="images/icon/icon.png" alt="" /></div>
+        <div class="comment-title"><img class="avatar" src="/images/icon/icon.png" alt="" /></div>
         <div class="comment-box">
           <textarea placeholder="您的评论可以一针见血" name="comment" id="comment-textarea" cols="100%" rows="3" tabindex="1" ></textarea>
-          <div class="comment-ctrl"> <span class="emotion"><img src="images/face/5.png" width="20" height="20" alt="" />表情</span>
+          <div class="comment-ctrl"> <span class="emotion"><img src="/images/face/5.png" width="20" height="20" alt="" />表情</span>
             <div class="comment-prompt"> <i class="fa fa-spin fa-circle-o-notch"></i> <span class="comment-prompt-text"></span> </div>
-            <input type="hidden" value="1" class="articleid" />
+            <input type="hidden" value="<?php if(isset($article_id)){echo $article_id;}?>" class="articleid" />
             <button type="submit" name="comment-submit" id="comment-submit" tabindex="5" articleid="1">评论</button>
           </div>
         </div>
-      </div>
-    </form>
-  </div-->
 
-  <!--div id="postcomments">
+         <div style="margin-top:10px;">
+            <input type="text" class="captcha_comment" style="height:35px;" placeholder="请输入验证码" maxlength="5" autocomplete="off" required="">
+            <img src="/api/captcha" style="height:35px;cursor:pointer;border:1px solid gray;" alt="验证码" class="img_captcha" draggable="false">
+         </div>
+
+      </div>
+  </div>
+
+  <div id="postcomments">
     <ol class="commentlist">
-      <li class="comment-content"><span class="comment-f">#1</span>
-        <div class="comment-avatar"><img class="avatar" src="images/icon/icon.png" alt="" /></div>
-        <div class="comment-main">
-          <p>来自<span class="address">河南郑州</span>的用户<span class="time">(2016-01-06)</span><br />
-            这是匿名评论的内容这是匿名评论的内容，这是匿名评论的内容这是匿名评论的内容这是匿名评论的内容这是匿名评论的内容这是匿名评论的内容这是匿名评论的内容。</p>
-        </div>
-      </li>
+      <?php if(!empty($comment_list)) {?>
+
+          <?php foreach($comment_list as $key => $item) {?>
+          <li class="comment-content"><span class="comment-f">#<?php echo $key + 1;?></span>
+            <div class="comment-avatar"><img class="avatar" src="/images/icon/icon.png" alt="" /></div>
+            <div class="comment-main">
+              <p>来自用户<span class="address">zero</span>(<span class="time"><?php echo $item['add_time'];?></span>)<br />
+                <span class="content"><?php echo $item['article_comment']; ?></span>
+              </p>
+            </div>
+          </li>
+          <?php } ?>
+
+      <?php } else {?>
+          <li class="comment-content" style="display:none;"><span class="comment-f"></span>
+            <div class="comment-avatar"><img class="avatar" src="/images/icon/icon.png" alt="" /></div>
+            <div class="comment-main">
+              <p>来自用户<span class="address">zero</span>(<span class="time"></span>)<br />
+                <span class="content"></span>
+              </p>
+            </div>
+          </li>
+      <?php } ?>
     </ol>
-    <div class="quotes"><span class="disabled">首页</span><span class="disabled">上一页</span><a class="current">1</a><a href="">2</a><span class="disabled">下一页</span><span class="disabled">尾页</span></div>
-  </div-->
+  </div>
