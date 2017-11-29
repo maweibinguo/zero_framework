@@ -146,14 +146,15 @@ $(function(){
 			promptText.text('请留下您的评论');
 			return false;
 		} 
-		commentButton.attr('disabled',true);
-		commentButton.addClass('disabled');
-		promptText.text('正在提交...');
 
         if(captcha == '') {
             layer.alert('请填写验证码');
             return false;
         }
+
+		commentButton.attr('disabled',true);
+		commentButton.addClass('disabled');
+		promptText.text('正在提交...');
 
 		$.ajax({   
 			type:"POST",
@@ -168,8 +169,13 @@ $(function(){
 				commentButton.attr('disabled',false);
 				commentButton.removeClass('disabled');
             
+                if(response.status != 'success') {
+                    layer.alert(response.message);
+                    $('.img_captcha').click();
+                    return false;
+                }
                 //添加评论
-                var li_str = '<li class="comment-content"><span class="comment-f">'+data.id_num+'</span>\
+                /*var li_str = '<li class="comment-content"><span class="comment-f">'+data.id_num+'</span>\
                                 <div class="comment-avatar"><img class="avatar" src="/images/icon/icon.png" alt="" /></div>\
                                 <div class="comment-main">\
                                   <p>来自用户<span class="address">zero</span>(<span class="time">'+data.add_time+'</span>)<br />\
@@ -177,7 +183,7 @@ $(function(){
                                   </p>\
                                 </div>\
                               </li>';
-                $('.commentlist').append(li_str);
+                $('.commentlist').append(li_str);*/
 				promptText.text('评论成功!');
 			}
 		});

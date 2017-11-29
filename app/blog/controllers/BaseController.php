@@ -82,11 +82,16 @@ class BaseController extends Controller
         if($login_data != false) {
             $this->is_login = true;
         }
-
-        if(isset($access_controll_list[$controller_name]) && 
-                                                            in_array($action_name, $access_controll_list[$controller_name])) {
-            if($login_data === false) {
-                return $this->response->redirect('/index/index');
+        if(isset($access_controll_list[strtolower($controller_name)]) && 
+                                                            in_array(strtolower($action_name), $access_controll_list[$controller_name])) {
+            if($login_data === false ) {
+                if($this->request->isAjax()) {
+                    $this->responseFailed('请先登录!'); 
+                } else {
+                    header('Location:/index/index');
+                    return false;
+                    //return $this->response->redirect('index/index');
+                }
             }
         }
 

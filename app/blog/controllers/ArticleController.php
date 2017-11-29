@@ -258,7 +258,7 @@ class ArticleController extends BaseController
                 if(count($messages_list)) {
                     foreach($messages_list as $message_item) {
                         $message = $message_item->getMessage();
-                        $error_message = Log::getErrorMessage($message, __CLASS__, __METHOD__, __LINE__);
+                        $error_message = Log::getErrorMessage($message);
                         throw new \Exception($error_message);
                     }
                 }
@@ -273,7 +273,7 @@ class ArticleController extends BaseController
         } catch(\Exception $e) {
             $error_message = $e->getMessage();
             Log::getInstance()->info($error_message);
-            $this->responseFailed('添加评论失败', []);
+            $this->responseFailed($error_message, []);
         }
     }
 }
