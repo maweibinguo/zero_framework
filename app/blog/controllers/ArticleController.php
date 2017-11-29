@@ -17,7 +17,8 @@ class ArticleController extends BaseController
 
     public $page_css = [
                             '/css/style_editor.css',
-                            '/css/editormd.css'
+                            '/css/editormd.css',
+                            '/css/dropload.css'
                         ];
 
     /**
@@ -136,9 +137,6 @@ class ArticleController extends BaseController
                                 '/js/editormd/editormd.min.js',
                                 '/js/editormd/preview.js',
                                 '/js/dropload.min.js'
-                                ];
-            $this->page_css = [
-                                    '/css/dropload.css'
                                 ];
             $article_id = $this->request->get('article_id');
             $article_service = new ArticleService();

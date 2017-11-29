@@ -50,8 +50,8 @@ class BaseController extends Controller
     public $common_css = [
                             'css/bootstrap.min.css',
                             'css/nprogress.css',
+                            'css/font-awesome.min.css',
                             'css/style.css',
-                            'css/font-awesome.min.css'
                          ];
 
     /**
