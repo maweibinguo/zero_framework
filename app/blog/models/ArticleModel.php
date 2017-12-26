@@ -186,7 +186,6 @@ class ArticleModel extends BaseModel
 
         $article_number = static::$redis->zCard(static::ARTICLE_COMMON_LIST);
         $return_data['article_number'] = $article_number;
-
         $article_list = static::$redis->zRevRange(  static::ARTICLE_COMMON_LIST, 
                                                     $condition['start'], 
                                                     $condition['end']

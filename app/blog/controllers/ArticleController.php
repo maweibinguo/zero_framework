@@ -136,7 +136,8 @@ class ArticleController extends BaseController
                                 '/js/editormd/lib/jquery.flowchart.min.js',
                                 '/js/editormd/editormd.min.js',
                                 '/js/editormd/preview.js',
-                                '/js/dropload.min.js'
+                                '/js/dropload.min.js',
+                                '/js/jquery.qqFace.js'
                                 ];
             $article_id = $this->request->get('article_id');
             $article_service = new ArticleService();

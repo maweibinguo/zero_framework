@@ -175,7 +175,7 @@ $(function(){
                     return false;
                 }
                 //添加评论
-                /*var li_str = '<li class="comment-content"><span class="comment-f">'+data.id_num+'</span>\
+                var li_str = '<li class="comment-content"><span class="comment-f">'+data.id_num+'</span>\
                                 <div class="comment-avatar"><img class="avatar" src="/images/icon/icon.png" alt="" /></div>\
                                 <div class="comment-main">\
                                   <p>来自用户<span class="address">zero</span>(<span class="time">'+data.add_time+'</span>)<br />\
@@ -183,7 +183,7 @@ $(function(){
                                   </p>\
                                 </div>\
                               </li>';
-                $('.commentlist').append(li_str);*/
+                $('.commentlist').append(li_str);
 				promptText.text('评论成功!');
 			}
 		});
@@ -196,7 +196,7 @@ $(function(){
 function replace_em(str){
 	str = str.replace(/\</g,'&lt;');
 	str = str.replace(/\>/g,'&gt;');
-	str = str.replace(/\[em_([0-9]*)\]/g,'<img src="/Home/images/arclist/$1.gif" border="0" />');
+	str = str.replace(/\[em_([0-9]*)\]/g,'<img src="/images/arclist/$1.gif" border="0" />');
 	return str;
 }
 
@@ -217,3 +217,12 @@ $('.img_captcha').click(function(){
     url = url + '?' +Math.random();
     $(this).attr('src', url);
 })
+
+//评论框表情
+$(function(){
+    $('.emotion').qqFace({
+        id : 'facebox', 
+        assign:'comment-textarea', 
+        path:'/images/arclist/'    //表情存放的路径
+    });
+ });   

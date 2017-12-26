@@ -9,7 +9,7 @@ use Gregwar\Captcha\CaptchaBuilder;
 class IndexController extends BaseController
 {
     public $page_js = [
-                       'js/dropload.min.js?df=df',
+                       'js/dropload.min.js',
                         ];
 
     public $page_css = [

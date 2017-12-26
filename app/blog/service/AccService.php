@@ -6,6 +6,7 @@ namespace app\blog\service;
 
 use core\base\Components;
 use app\blog\models\UserModel;
+use app\blog\models\RoleModel;
 
 class AccService extends Components
 {
@@ -16,6 +17,7 @@ class AccService extends Components
     {
         $user_model = new UserModel();
         $user_data['add_time'] = time();
+        $user_data['role_type'] = RoleModel::ROLE_TYPE_NORL;
         $user_model->addUser($user_data);
     }
 
@@ -30,8 +32,4 @@ class AccService extends Components
         $login_session_name = $this->config->get('login_session_name');
         $this->session->set($login_session_name, $user_data_encrypt);
     }
-
-    /**
-     * 统计用户的数量
-     */
 }

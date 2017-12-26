@@ -47,7 +47,7 @@
                     <a href="/acc/logout"/> 退出登录</a>
             <?php }else{ ?>
                     Hi,请登录
-                    <!--/a>&nbsp;&nbsp;<a href="javascript:;" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a-->
+                    </a>&nbsp;&nbsp;<a data-toggle="modal" data-target="#registerModal" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a>
             <?php } ?>
         </a>
       </div>
@@ -57,12 +57,12 @@
       </div>
       <div class="collapse navbar-collapse" id="header-navbar">
         <ul class="nav navbar-nav navbar-right">
-          <li class="hidden-index active"><a data-cont="insisting首页" href="/index/index">insisting首页</a></li>
+          <li class="hidden-index <?php if(empty($condition['category'])){echo 'active';} ?>"><a data-cont="insisting首页" href="/index/index">insisting首页</a></li>
           <?php if(isset($category_list)) ?>
           <?php foreach($category_list as $value => $name) { ?>
-          <li><a href="/index/index?category=<?php echo $value;?>"><?php echo $name; ?></a></li>
+          <li class="<?php if($condition['category'] == $value){echo 'active';} ?>"><a href="/index/index?category=<?php echo $value;?>"><?php echo $name; ?></a></li>
           <?php } ?>
-          <?php if($is_login):?>
+          <?php if($is_login && $user_data['role_type'] == 1):?>
           <li><a href="/index/index?status=0">草稿列表</a></li>
           <li><a href="/article/create">写文章</a></li>
           <?php endif;?>
@@ -123,7 +123,7 @@
 </div>
 
 <!--登录注册模态框-->
-<!--div class="modal fade user-select" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel">
+<div class="modal fade user-select" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form action="/acc/register" method="post" id='register_form'>
@@ -155,7 +155,7 @@
       </form>
     </div>
   </div>
-</div-->
+</div>
 <?php $this->assets->outputJs('footer'); ?>
 </body>
 </html>

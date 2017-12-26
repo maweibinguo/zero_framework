@@ -36,5 +36,45 @@ $(document).ready(function(){
             }
         })
         return false;
-    })  
+    });
+
+   $('#register_form').submit(function(){
+        var user_name = $.trim($('#registerModalUserNmae').val());
+        var password = $('#registerModalUserPwd').val();
+        var captcha = $('#registerCaptcha').val();
+        if(user_name == '') {
+            layer.alert('用户名必填');
+            return false;
+        }
+        if(password == '') {
+            layer.alet('密码必填');
+            return false;
+        }
+        if(captcha == '') {
+            layer.alert('验证码必填');
+            return false;
+        }
+        $.ajax({
+            'dataType':'json',
+            'url':'/acc/register',
+            'type':'post',
+            'data':{
+                'user_name' : user_name,
+                'password' : password,
+                'captcha'  : captcha
+            },
+            'success':function(data){
+                if(data.status == 'success') {
+                    layer.alert('注册成功！请登录！');
+                    window.location.href="/index/index";
+                } else {
+                    layer.alert(data.message); 
+                    if(data.message == '验证码不正确') {
+                        $('.img_captcha').click(); 
+                    }
+                }
+            }
+        })
+        return false;
+    });  
 });

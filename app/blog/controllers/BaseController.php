@@ -90,10 +90,23 @@ class BaseController extends Controller
                 } else {
                     header('Location:/index/index');
                     return false;
-                    //return $this->response->redirect('index/index');
                 }
             }
         }
+
+        //校验权限,管理员才能够操作
+        $admin_action_list = $this->config->get('admin_action');
+        if(isset($admin_action_list[strtolower($controller_name)]) && 
+                                                            in_array(strtolower($action_name), $admin_action_list[$controller_name])) {
+            if($user_data['role_type'] != 1) {
+                if($this->request->isAjax()) {
+                    $this->responseFailed('只有管理员才能执行!'); 
+                } else {
+                    header('Location:/index/index');
+                    return false;
+                }
+            }
+        }        
 
         //校验是否是重复提交
         if($this->request->isPost()) {
