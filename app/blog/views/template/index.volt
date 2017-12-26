@@ -28,7 +28,7 @@
     <div class="container">
       <div class="header-topbar hidden-xs link-border">
         <ul class="site-nav topmenu">
-          <li><a href="links.html" rel="nofollow">友情链接</a></li>
+          <!--li><a href="links.html" rel="nofollow">友情链接</a></li>
           <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" rel="nofollow">关注本站 <span class="caret"></span></a>
             <ul class="dropdown-menu header-topbar-dropdown-menu">
 
@@ -47,7 +47,7 @@
                     <a href="/acc/logout"/> 退出登录</a>
             <?php }else{ ?>
                     Hi,请登录
-                    </a>&nbsp;&nbsp;<a data-toggle="modal" data-target="#registerModal" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a>
+                    </a>&nbsp;&nbsp;<a data-toggle="modal" data-target="#registerModal" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<!--a href="" rel="nofollow">找回密码</a-->
             <?php } ?>
         </a>
       </div>
