@@ -5,6 +5,7 @@ use app\blog\service\ArticleService;
 use app\blog\service\CommentService;
 use app\blog\validator\Article as ArticleValidator;
 use app\blog\validator\Comment as CommentValidator;
+use app\blog\validator\AutoSave as AutoSaveValidator;
 use core\base\Log;
 
 class ArticleController extends BaseController
@@ -273,6 +274,43 @@ class ArticleController extends BaseController
             $error_message = $e->getMessage();
             Log::getInstance()->info($error_message);
             $this->responseFailed($error_message, []);
+        }
+    }
+
+    /**
+     * 自动保存
+     */
+    public function autoSaveAction()
+    {
+        try{
+            if($this->request->isPost()) {
+               $post_data = $this->request->getPost();  
+                $autosave_validator = new AutoSaveValidator();
+                $autosave_validator = $autosave_validator->getAddValidator();
+                $messages_list = $autosave_validator->validate($post_data);
+                if(count($messages_list)) {
+                    foreach($messages_list as $message_item) {
+                        $message = $message_item->getMessage();
+                        $error_message = Log::getErrorMessage($message);
+                        throw new \Exception($error_message);
+                    }
+                }
+
+                /* 自动保存文章 */
+                $article_service = new ArticleService();
+                $post_data['mdcontent'] = base64_encode($post_data['mdcontent']);
+                $post_data['htmlcontent'] = base64_encode($post_data['htmlcontent']);
+                $save_time = date('Y-m-d H:i:s');
+                $post_data['title'] = empty($post_data['title']) ? 'auto_save_' . $save_time : trim($post_data['title']);
+                $article_id= $article_service->autoSaveAritcle($post_data);
+
+            } else {
+                throw new \Exception("请求方式不正确");
+            }
+        } catch(\Exception $e) {
+            $error_message = $e->getMessage();
+            Log::getInstance()->info($error_message);
+            $this->responseFailed('自动保存失败', []);
         }
     }
 }

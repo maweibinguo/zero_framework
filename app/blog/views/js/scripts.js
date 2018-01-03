@@ -217,12 +217,3 @@ $('.img_captcha').click(function(){
     url = url + '?' +Math.random();
     $(this).attr('src', url);
 })
-
-//评论框表情
-$(function(){
-    $('.emotion').qqFace({
-        id : 'facebox', 
-        assign:'comment-textarea', 
-        path:'/images/arclist/'    //表情存放的路径
-    });
- });   

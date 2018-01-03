@@ -294,4 +294,30 @@ class ArticleModel extends BaseModel
         }
     
     }
+
+    /**
+     * 自动保存
+     */
+    public function autoSave($article_detail)
+    {
+        $article_key_name = trim($article_detail['article_id']);
+        if( empty($article_key_name) ) {
+            $number = static::$redis->incr(static::ARTICLE_COUNT);
+            $article_key_name = $this->getKeyName([static::ARTICLE_DETAIL, $number]);
+            $article_detail['article_id'] = $article_key_name;
+        }
+
+        $result = static::$redis->hMset($article_key_name, $article_detail);
+        if($result === false) {
+            $error_message = Log::getErrorMessage('添加文章失败', __CLASS__, __METHOD__, __LINE__);
+            throw new \Exception($error_message);
+        }
+
+        //向有序集合中添加文章keyname 分数为添加时间
+        $length = static::$redis->zAdd(static::ARTICLE_DRAFT_LIST, $article_detail['add_time'], $article_key_name);
+
+        //向所有文章集合中添加元素
+        static::$redis->zAdd(static::ARTICLE_ALL_LIST, $article_detail['add_time'], $article_key_name);
+        return $article_key_name;
+    }
 }

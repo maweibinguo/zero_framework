@@ -134,6 +134,9 @@ $(function() {
             $('.header').show();
             $('.tijiao').show(); 
             $('.footer').show(); 
+        },
+        //监听变化
+        onchange:function(){
         }
     });
 });

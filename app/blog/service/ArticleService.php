@@ -47,6 +47,20 @@ class ArticleService extends Components
     }
 
     /**
+     * 添加文章
+     */
+    public function autoSaveAritcle($article_detail)
+    {
+        //添加文章
+        $article_model = new ArticleModel();
+        $article_detail['add_time'] = time();
+        $article_detail['status'] = ArticleModel::ARTICLE_STATUS_DRAFT;
+        $article_key_name = $article_model->autoSave($article_detail);
+
+        //返回结果
+        return $article_key_name;
+    }
+    /**
      * 修改文章
      */
     public function modifyArticle($article_detail)
