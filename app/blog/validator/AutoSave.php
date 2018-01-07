@@ -9,7 +9,7 @@ use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\StringLength;
 use Phalcon\Validation\Validator\Callback;
 
-class Article
+class AutoSave
 {
     /**
      * 获取添加文章是的验证器

@@ -137,6 +137,50 @@ $(function() {
         },
         //监听变化
         onchange:function(){
+                        var title = $.trim($('#title').val());
+                        var tag = $.trim($('#tag').val());
+                        var category = $.trim($('#category').val());
+                        var headimage = $.trim($('#headimage').val());
+                        var mdcontent = $.trim(testEditor.getMarkdown());
+                        var htmlcontent = $.trim(testEditor.getHTML()); 
+                        var article_id = $.trim($('#article_id').val());
+                        var ishot = $.trim($('#ishot').val());    
+                        if($.trim(mdcontent) == '') {
+                            return false;
+                        }
+                        var post_data = {
+                                            'title':title,
+                                            'tag':tag,
+                                            'mdcontent':mdcontent,
+                                            'htmlcontent':htmlcontent,
+                                            'status':status,
+                                            'category':category,
+                                            'headimage':headimage,
+                                            'ishot':ishot,
+                                            'autosave':1
+                                        };
+
+                        if(article_id) {
+                            post_data.article_id = article_id;
+                        }
+                        $.ajax({
+                            'dataType':'json',
+                            'url':'/article/autoSave',
+                            'type':'post',
+                            'data':post_data,
+                             'success':function(data){
+                                 if(data.status != 'success') {
+                                    layer.alert(data.message, {'icon':6}); 
+                                 } else {
+                                     if($('#article_id').length <= 0) {
+                                        var input_str = '<input type="hidden" name="article_id" id="article_id" value="">';
+                                        $('#article_form').append(input_str);
+                                     }
+                                    $('#article_id').val($.trim(data.data.article_id));
+                                 }
+                             }
+                        });
         }
+        //监听结束
     });
 });

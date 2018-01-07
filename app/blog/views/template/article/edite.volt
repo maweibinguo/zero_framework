@@ -5,7 +5,7 @@
         $action_url = '/article/create';
     }
 ?>
-<form class="form-horizontal" role="form" action="<?php echo $action_url;?>">
+<form class="form-horizontal" role="form" action="<?php echo $action_url;?>" id="article_form">
     <?php if(isset($article_detail) && !empty($article_detail)) {?>
         <input type="hidden" name="article_id" id="article_id" value="<?php echo $article_detail['article_id'];?>"/>
     <?php } ?>

@@ -130,12 +130,18 @@ class BaseController extends Controller
         }
 
         //校验令牌
-        if($this->request->isPost() && !$this->security->checkToken()) {
-            if($this->request->isAjax()) {
-                $this->responseFailed('非法请求');
-            } else {
-                $this->flashSession->error('非法请求'); 
-                return $this->response->redirect('error/notFound');
+        if($this->request->isPost()) {
+            $logic_action_no_check = $this->config->get('logic_action_no_check');
+            $is_need_checked = ( isset($logic_action_no_check[$controller_name]) && 
+                                                                                  in_array($action_name, $logic_action_no_check[$controller_name]) ) ? false : true;
+    
+            if($is_need_checked && !$this->security->checkToken()) {
+                if($this->request->isAjax()) {
+                    $this->responseFailed('非法请求');
+                } else {
+                    $this->flashSession->error('非法请求'); 
+                    return $this->response->redirect('error/notFound');
+                }
             }
         }
     }

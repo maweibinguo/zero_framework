@@ -300,7 +300,7 @@ class ArticleModel extends BaseModel
      */
     public function autoSave($article_detail)
     {
-        $article_key_name = trim($article_detail['article_id']);
+        $article_key_name = isset($article_detail['article_id']) ? trim($article_detail['article_id']) : '';
         if( empty($article_key_name) ) {
             $number = static::$redis->incr(static::ARTICLE_COUNT);
             $article_key_name = $this->getKeyName([static::ARTICLE_DETAIL, $number]);

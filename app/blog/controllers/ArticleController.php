@@ -302,8 +302,9 @@ class ArticleController extends BaseController
                 $post_data['htmlcontent'] = base64_encode($post_data['htmlcontent']);
                 $save_time = date('Y-m-d H:i:s');
                 $post_data['title'] = empty($post_data['title']) ? 'auto_save_' . $save_time : trim($post_data['title']);
+                $post_data['article_view_statistics'] = 0;
                 $article_id= $article_service->autoSaveAritcle($post_data);
-
+                $this->responseSuccess('自动保存成功', ['article_id' => $article_id], $is_check = true);
             } else {
                 throw new \Exception("请求方式不正确");
             }

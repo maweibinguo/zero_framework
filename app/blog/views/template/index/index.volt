@@ -1,7 +1,9 @@
 <?php if(isset($article_list) && is_array($article_list)) :?>
   <?php foreach($article_list as $article_detail) :?>
   <article class="excerpt excerpt-1"><a class="focus" href="/article/view?article_id=<?php echo $article_detail['article_id'];?>" title=""><img class="thumb" data-original="<?php if(isset($article_detail['headimage'])) {echo $article_detail['headimage'];} else { echo "/images/excerpt.jpg"; }?>" src="<?php if(isset($article_detail['headimage'])) {echo $article_detail['headimage'];} else { echo "/images/excerpt.jpg"; } ?>" alt="文章头图"></a>
-    <header><a class="cat" href="/index/index?category=<?php if(isset($article_detail['category'])) { echo $article_detail['category']; } ?> "><?php if( isset($article_detail['category']) && isset($category_list) ) { echo $category_list[$article_detail['category']]; }?><i></i></a>
+    <?php if(isset($article_detail['category']) && !empty($article_detail['category'])) {?>
+    <header><a class="cat" href="/index/index?category=<?php if(isset($article_detail['category']) && !empty($article_detail['category'])) { echo $article_detail['category']; } ?> "><?php if( isset($article_detail['category']) && isset($category_list) ) { echo $category_list[$article_detail['category']]; }?><i></i></a>
+    <?php }?>
       <h2><a href="/article/view?article_id=<?php echo $article_detail['article_id'];?>" title="<?php echo $article_detail['title'];?>"><?php echo $article_detail['title'];?></a></h2>
     </header>
     <p class="meta">
